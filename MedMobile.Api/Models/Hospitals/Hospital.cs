@@ -6,6 +6,7 @@ using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using MedMobile.Api.Models.Doctors;
 
 namespace MedMobile.Api.Models.Hospitals
 {

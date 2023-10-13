@@ -5,6 +5,7 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using MedMobile.Api.Models.Users;
 
 namespace MedMobile.Api.Models.Persons
 {
