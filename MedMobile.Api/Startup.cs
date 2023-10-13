@@ -2,6 +2,8 @@
 // Copyright (c) DevZilla team
 // ---------------------------------------------------------------
 
+using FluentAssertions.Common;
+using MedMobile.Api.Configurations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,18 +27,7 @@ namespace MedMobile.Api
 
             services.AddControllers();
 
-            var apiInfo = new OpenApiInfo()
-            {
-                Title = "MedMobile.Api",
-                Version = "v1"
-            };
-
-            services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc(
-                    name: "v1",
-                    info: apiInfo);
-            });
+            services.ConfigureSwagger(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
