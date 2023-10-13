@@ -396,3 +396,30 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+MedMobile.Web/admin/node_modules
+MedMobile.Web/client/node_modules
+/.pnp
+.pnp.js
+
+# production
+MedMobile.Web/admin/build
+MedMobile.Web/client/build
+MedMobile.Web/admin/dist
+MedMobile.Web/client/dist
+MedMobile.Web/admin/demo-*
+
+# misc
+MedMobile.Web/admin/.DS_Store
+MedMobile.Web/admin/.env.local
+MedMobile.Web/admin/.env.development.local
+MedMobile.Web/admin/.env.test.local
+MedMobile.Web/admin/.env.production.local
+
+MedMobile.Web/admin/yarn.lock
+MedMobile.Web/client/yarn.lock
+MedMobile.Web/admin/.docz
+MedMobile.Web/admin/.eslintcache
+MedMobile.Web/admin/.vscode
+MedMobile.Web/client/.vscode
+MedMobile.Web/admin/.idea
+MedMobile.Web/client/.idea
