@@ -4,9 +4,9 @@
 
 using MedMobile.Api.Models.TimeLines;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
 
 namespace MedMobile.Api.Brokers.StorageBrokers
 {

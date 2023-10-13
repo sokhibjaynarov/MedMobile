@@ -2,10 +2,10 @@
 // Copyright (c) DevZilla team
 // ---------------------------------------------------------------
 
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 using MedMobile.Api.Models.Doctors;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedMobile.Api.Models.Fields
 {

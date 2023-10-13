@@ -3,9 +3,9 @@
 // ---------------------------------------------------------------
 
 using MedMobile.Api.Models.Sessions;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
 
 namespace MedMobile.Api.Brokers.StorageBrokers
 {

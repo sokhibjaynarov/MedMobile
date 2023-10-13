@@ -2,10 +2,10 @@
 // Copyright (c) DevZilla team
 // ---------------------------------------------------------------
 
+using MedMobile.Api.Models.Users;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
-using MedMobile.Api.Models.Users;
 
 namespace MedMobile.Api.Brokers.UserManagement
 {

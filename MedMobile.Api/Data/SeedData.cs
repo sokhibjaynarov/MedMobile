@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
-using System;
+﻿using MedMobile.Api.Models.Roles;
 using MedMobile.Api.Models.Users;
-using MedMobile.Api.Models.Roles;
+using Microsoft.AspNetCore.Identity;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MedMobile.Api.Data
 {

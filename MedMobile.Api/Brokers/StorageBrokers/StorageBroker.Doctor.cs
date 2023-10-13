@@ -2,11 +2,11 @@
 // Copyright (c) DevZilla team
 // ---------------------------------------------------------------
 
+using MedMobile.Api.Models.Doctors;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
-using MedMobile.Api.Models.Doctors;
 
 namespace MedMobile.Api.Brokers.StorageBrokers
 {

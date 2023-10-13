@@ -2,10 +2,10 @@
 // Copyright (c) DevZilla team
 // ---------------------------------------------------------------
 
+using MedMobile.Api.Models.Fields;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
-using MedMobile.Api.Models.Fields;
 
 namespace MedMobile.Api.Brokers.StorageBrokers
 {
