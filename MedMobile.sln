@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedMobile.Api", "MedMobile.Api\MedMobile.Api.csproj", "{B3F17F83-2025-4154-A4FD-6FB6E18775F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedMobile.Api.Infrastructure.Build", "MedMobile.Api.Infrastructure.Build\MedMobile.Api.Infrastructure.Build.csproj", "{DF79F84E-48C5-4FD3-8493-3503E03C2995}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B3F17F83-2025-4154-A4FD-6FB6E18775F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3F17F83-2025-4154-A4FD-6FB6E18775F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3F17F83-2025-4154-A4FD-6FB6E18775F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3F17F83-2025-4154-A4FD-6FB6E18775F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF79F84E-48C5-4FD3-8493-3503E03C2995}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF79F84E-48C5-4FD3-8493-3503E03C2995}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF79F84E-48C5-4FD3-8493-3503E03C2995}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF79F84E-48C5-4FD3-8493-3503E03C2995}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0A2C9AB9-1F9A-4BA8-BF94-79AED6801C3B}
+	EndGlobalSection
+EndGlobal
