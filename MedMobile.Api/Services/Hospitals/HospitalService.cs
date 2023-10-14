@@ -102,16 +102,32 @@ namespace MedMobile.Api.Services.Hospitals
                 return await storageBroker.DeleteHospitalAsync(maybeHospital);
             });
 
-        public IQueryable<Hospital> RetrieveAllHospitals() =>
-            TryCatch(() =>
-                 this.storageBroker.SelectAllHospitals());
+        public IQueryable<Hospital> RetrieveAllHospitals()
+        {
+            try
+            {
+                return this.storageBroker.SelectAllHospitals();
+            }
+            catch (Exception ex)
+            {
+                this.loggingBroker.LogError(ex);
+                throw;
+            }
+        }
 
-        public ValueTask<Hospital> RetrieveHospitalByIdAsync(Guid hospitalId) =>
-            TryCatch(async () =>
+        public async ValueTask<Hospital> RetrieveHospitalByIdAsync(Guid hospitalId)
+        {
+            try
             {
                 Hospital maybeHospital =
-                    await storageBroker.SelectHospitalByIdAsync(hospitalId);
+                   await storageBroker.SelectHospitalByIdAsync(hospitalId);
                 return maybeHospital;
-            });
+            }
+            catch (Exception ex)
+            {
+                this.loggingBroker.LogError(ex);
+                throw;
+            }
+        }
     }
 }

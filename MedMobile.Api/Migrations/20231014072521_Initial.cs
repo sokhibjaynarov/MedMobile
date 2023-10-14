@@ -6,17 +6,17 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MedMobile.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial2 : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "Identity");
+                name: "MedMobile");
 
             migrationBuilder.CreateTable(
                 name: "Fields",
-                schema: "Identity",
+                schema: "MedMobile",
                 columns: table => new
                 {
                     FieldId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -30,13 +30,14 @@ namespace MedMobile.Api.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Hospitals",
-                schema: "Identity",
+                schema: "MedMobile",
                 columns: table => new
                 {
                     HospitalId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Number = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Website = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -47,7 +48,7 @@ namespace MedMobile.Api.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Role",
-                schema: "Identity",
+                schema: "MedMobile",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -62,7 +63,7 @@ namespace MedMobile.Api.Migrations
 
             migrationBuilder.CreateTable(
                 name: "User",
-                schema: "Identity",
+                schema: "MedMobile",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -92,7 +93,7 @@ namespace MedMobile.Api.Migrations
 
             migrationBuilder.CreateTable(
                 name: "RoleClaims",
-                schema: "Identity",
+                schema: "MedMobile",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -107,7 +108,7 @@ namespace MedMobile.Api.Migrations
                     table.ForeignKey(
                         name: "FK_RoleClaims_Role_RoleId",
                         column: x => x.RoleId,
-                        principalSchema: "Identity",
+                        principalSchema: "MedMobile",
                         principalTable: "Role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -115,7 +116,7 @@ namespace MedMobile.Api.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Doctors",
-                schema: "Identity",
+                schema: "MedMobile",
                 columns: table => new
                 {
                     DoctorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -129,14 +130,14 @@ namespace MedMobile.Api.Migrations
                     table.ForeignKey(
                         name: "FK_Doctors_Hospitals_HospitalId",
                         column: x => x.HospitalId,
-                        principalSchema: "Identity",
+                        principalSchema: "MedMobile",
                         principalTable: "Hospitals",
                         principalColumn: "HospitalId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Doctors_User_UserId",
                         column: x => x.UserId,
-                        principalSchema: "Identity",
+                        principalSchema: "MedMobile",
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -144,7 +145,7 @@ namespace MedMobile.Api.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Sessions",
-                schema: "Identity",
+                schema: "MedMobile",
                 columns: table => new
                 {
                     SessionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -159,7 +160,7 @@ namespace MedMobile.Api.Migrations
                     table.ForeignKey(
                         name: "FK_Sessions_User_UserId",
                         column: x => x.UserId,
-                        principalSchema: "Identity",
+                        principalSchema: "MedMobile",
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -167,7 +168,7 @@ namespace MedMobile.Api.Migrations
 
             migrationBuilder.CreateTable(
                 name: "TimeLines",
-                schema: "Identity",
+                schema: "MedMobile",
                 columns: table => new
                 {
                     TimeLineId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -181,7 +182,7 @@ namespace MedMobile.Api.Migrations
                     table.ForeignKey(
                         name: "FK_TimeLines_User_DoctorUserId",
                         column: x => x.DoctorUserId,
-                        principalSchema: "Identity",
+                        principalSchema: "MedMobile",
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -189,7 +190,7 @@ namespace MedMobile.Api.Migrations
 
             migrationBuilder.CreateTable(
                 name: "UserClaims",
-                schema: "Identity",
+                schema: "MedMobile",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -204,7 +205,7 @@ namespace MedMobile.Api.Migrations
                     table.ForeignKey(
                         name: "FK_UserClaims_User_UserId",
                         column: x => x.UserId,
-                        principalSchema: "Identity",
+                        principalSchema: "MedMobile",
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -212,7 +213,7 @@ namespace MedMobile.Api.Migrations
 
             migrationBuilder.CreateTable(
                 name: "UserLogins",
-                schema: "Identity",
+                schema: "MedMobile",
                 columns: table => new
                 {
                     LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -226,7 +227,7 @@ namespace MedMobile.Api.Migrations
                     table.ForeignKey(
                         name: "FK_UserLogins_User_UserId",
                         column: x => x.UserId,
-                        principalSchema: "Identity",
+                        principalSchema: "MedMobile",
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -234,7 +235,7 @@ namespace MedMobile.Api.Migrations
 
             migrationBuilder.CreateTable(
                 name: "UserRoles",
-                schema: "Identity",
+                schema: "MedMobile",
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -246,14 +247,14 @@ namespace MedMobile.Api.Migrations
                     table.ForeignKey(
                         name: "FK_UserRoles_Role_RoleId",
                         column: x => x.RoleId,
-                        principalSchema: "Identity",
+                        principalSchema: "MedMobile",
                         principalTable: "Role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserRoles_User_UserId",
                         column: x => x.UserId,
-                        principalSchema: "Identity",
+                        principalSchema: "MedMobile",
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -261,7 +262,7 @@ namespace MedMobile.Api.Migrations
 
             migrationBuilder.CreateTable(
                 name: "UserTokens",
-                schema: "Identity",
+                schema: "MedMobile",
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -275,15 +276,15 @@ namespace MedMobile.Api.Migrations
                     table.ForeignKey(
                         name: "FK_UserTokens_User_UserId",
                         column: x => x.UserId,
-                        principalSchema: "Identity",
+                        principalSchema: "MedMobile",
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "DoctorField",
-                schema: "Identity",
+                name: "DoctorFields",
+                schema: "MedMobile",
                 columns: table => new
                 {
                     DoctorFieldId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -292,52 +293,52 @@ namespace MedMobile.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DoctorField", x => x.DoctorFieldId);
+                    table.PrimaryKey("PK_DoctorFields", x => x.DoctorFieldId);
                     table.ForeignKey(
-                        name: "FK_DoctorField_Doctors_DoctorId",
+                        name: "FK_DoctorFields_Doctors_DoctorId",
                         column: x => x.DoctorId,
-                        principalSchema: "Identity",
+                        principalSchema: "MedMobile",
                         principalTable: "Doctors",
                         principalColumn: "DoctorId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DoctorField_Fields_FieldId",
+                        name: "FK_DoctorFields_Fields_FieldId",
                         column: x => x.FieldId,
-                        principalSchema: "Identity",
+                        principalSchema: "MedMobile",
                         principalTable: "Fields",
                         principalColumn: "FieldId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_DoctorField_DoctorId",
-                schema: "Identity",
-                table: "DoctorField",
+                name: "IX_DoctorFields_DoctorId",
+                schema: "MedMobile",
+                table: "DoctorFields",
                 column: "DoctorId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_DoctorField_FieldId",
-                schema: "Identity",
-                table: "DoctorField",
+                name: "IX_DoctorFields_FieldId",
+                schema: "MedMobile",
+                table: "DoctorFields",
                 column: "FieldId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Doctors_HospitalId",
-                schema: "Identity",
+                schema: "MedMobile",
                 table: "Doctors",
                 column: "HospitalId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Doctors_UserId",
-                schema: "Identity",
+                schema: "MedMobile",
                 table: "Doctors",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
-                schema: "Identity",
+                schema: "MedMobile",
                 table: "Role",
                 column: "NormalizedName",
                 unique: true,
@@ -345,31 +346,31 @@ namespace MedMobile.Api.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",
-                schema: "Identity",
+                schema: "MedMobile",
                 table: "RoleClaims",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sessions_UserId",
-                schema: "Identity",
+                schema: "MedMobile",
                 table: "Sessions",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TimeLines_DoctorUserId",
-                schema: "Identity",
+                schema: "MedMobile",
                 table: "TimeLines",
                 column: "DoctorUserId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
-                schema: "Identity",
+                schema: "MedMobile",
                 table: "User",
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
-                schema: "Identity",
+                schema: "MedMobile",
                 table: "User",
                 column: "NormalizedUserName",
                 unique: true,
@@ -377,19 +378,19 @@ namespace MedMobile.Api.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserClaims_UserId",
-                schema: "Identity",
+                schema: "MedMobile",
                 table: "UserClaims",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserLogins_UserId",
-                schema: "Identity",
+                schema: "MedMobile",
                 table: "UserLogins",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_RoleId",
-                schema: "Identity",
+                schema: "MedMobile",
                 table: "UserRoles",
                 column: "RoleId");
         }
@@ -398,56 +399,56 @@ namespace MedMobile.Api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "DoctorField",
-                schema: "Identity");
+                name: "DoctorFields",
+                schema: "MedMobile");
 
             migrationBuilder.DropTable(
                 name: "RoleClaims",
-                schema: "Identity");
+                schema: "MedMobile");
 
             migrationBuilder.DropTable(
                 name: "Sessions",
-                schema: "Identity");
+                schema: "MedMobile");
 
             migrationBuilder.DropTable(
                 name: "TimeLines",
-                schema: "Identity");
+                schema: "MedMobile");
 
             migrationBuilder.DropTable(
                 name: "UserClaims",
-                schema: "Identity");
+                schema: "MedMobile");
 
             migrationBuilder.DropTable(
                 name: "UserLogins",
-                schema: "Identity");
+                schema: "MedMobile");
 
             migrationBuilder.DropTable(
                 name: "UserRoles",
-                schema: "Identity");
+                schema: "MedMobile");
 
             migrationBuilder.DropTable(
                 name: "UserTokens",
-                schema: "Identity");
+                schema: "MedMobile");
 
             migrationBuilder.DropTable(
                 name: "Doctors",
-                schema: "Identity");
+                schema: "MedMobile");
 
             migrationBuilder.DropTable(
                 name: "Fields",
-                schema: "Identity");
+                schema: "MedMobile");
 
             migrationBuilder.DropTable(
                 name: "Role",
-                schema: "Identity");
+                schema: "MedMobile");
 
             migrationBuilder.DropTable(
                 name: "Hospitals",
-                schema: "Identity");
+                schema: "MedMobile");
 
             migrationBuilder.DropTable(
                 name: "User",
-                schema: "Identity");
+                schema: "MedMobile");
         }
     }
 }
