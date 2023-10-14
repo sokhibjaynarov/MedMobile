@@ -57,7 +57,7 @@ namespace MedMobile.Api.Services.TimeLines
                 {
                     DoctorUserId = viewModel.DoctorUserId,
                     StartDateTime = viewModel.StartDateTime,
-                    EndDateTime = viewModel.EndDateTime ?? viewModel.StartDateTime.AddMinutes(30)
+                    EndDateTime = viewModel.EndDateTime ?? viewModel.StartDateTime.AddHours(1)
                 };
 
                 TimeLine createdTimeLine = await storageBroker.InsertTimeLineAsync(timeLine);
