@@ -4,6 +4,7 @@ using MedMobile.Api.Brokers.StorageBrokers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedMobile.Api.Migrations
 {
     [DbContext(typeof(StorageBroker))]
-    partial class StorageBrokerModelSnapshot : ModelSnapshot
+    [Migration("20231014180114_AdminIdAddedToHospital")]
+    partial class AdminIdAddedToHospital
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -183,20 +186,17 @@ namespace MedMobile.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("DoctorUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("EndDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EventUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("StartDateTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("TimeLineId");
 
@@ -445,13 +445,9 @@ namespace MedMobile.Api.Migrations
 
             modelBuilder.Entity("MedMobile.Api.Models.TimeLines.TimeLine", b =>
                 {
-                    b.HasOne("MedMobile.Api.Models.Users.User", "User")
+                    b.HasOne("MedMobile.Api.Models.Users.User", null)
                         .WithMany("TimeLines")
-                        .HasForeignKey("DoctorUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
