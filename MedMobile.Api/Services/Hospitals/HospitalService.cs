@@ -47,7 +47,6 @@ namespace MedMobile.Api.Services.Hospitals
                     Name = viewModel.Name,
                     Description = viewModel.Description,
                     Email = viewModel.Email,
-                    Location = viewModel.Location,
                     PhoneNumber = viewModel.PhoneNumber,
                     Website = viewModel.Website,
                     Longitude = viewModel.Longitude,
