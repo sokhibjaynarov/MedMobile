@@ -58,7 +58,7 @@ namespace MedMobile.Api.Services.Doctors
         {
             try
             {
-                if (viewModel.HospitalId == Guid.Empty || viewModel.UserId == Guid.Empty)
+                if (viewModel.HospitalId == Guid.Empty)
                 {
                     throw new Exception();
                 }
@@ -66,7 +66,6 @@ namespace MedMobile.Api.Services.Doctors
                 Doctor doctor = new Doctor
                 {
                     HospitalId = viewModel.HospitalId,
-                    UserId = viewModel.UserId,
                     Description = viewModel.Description
                 };
 

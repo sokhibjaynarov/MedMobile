@@ -19,5 +19,6 @@ namespace MedMobile.Api.Brokers.UserManagement
         ValueTask<User> DeleteUserAsync(User user);
         ValueTask<bool> CheckPasswordAsync(User user, string password);
         ValueTask<IList<string>> SelectAllUserRolesAsync(User user);
+        ValueTask<User> AddToRolesAsync(User user, List<string> roles);
     }
 }

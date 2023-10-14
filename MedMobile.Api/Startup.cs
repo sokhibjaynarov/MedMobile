@@ -92,8 +92,8 @@ namespace MedMobile.Api
 
         private static void AddBrokers(IServiceCollection services)
         {
-            services.AddTransient<IStorageBroker, StorageBroker>();
-            services.AddTransient<ILoggingBroker, LoggingBroker>();
+            services.AddScoped<IStorageBroker, StorageBroker>();
+            services.AddScoped<ILoggingBroker, LoggingBroker>();
             services.AddScoped<IUserManagementBroker, UserManagementBroker>();
             services.AddScoped<IRoleManagementBroker, RoleManagementBroker>();
         }

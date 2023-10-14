@@ -57,5 +57,13 @@ namespace MedMobile.Api.Brokers.UserManagement
 
         public async ValueTask<IList<string>> SelectAllUserRolesAsync(User user)
             => await this.userManagement.GetRolesAsync(user);
+
+        public async ValueTask<User> AddToRolesAsync(User user, List<string> roles)
+        {
+            var broker = new UserManagementBroker(this.userManagement);
+            await broker.userManagement.AddToRolesAsync(user, roles);
+
+            return user;
+        }
     }
 }

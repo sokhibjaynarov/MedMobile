@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System;
 using MedMobile.Api.Services.Users;
 using MedMobile.Api.ViewModels.Users;
+using MedMobile.Api.ViewModels.Doctors;
 
 namespace MedMobile.Api.Controllers
 {
@@ -23,8 +24,22 @@ namespace MedMobile.Api.Controllers
         {
             try
             {
-                var token = await this.userService.RegisterPatientAsync(viewModel);
-                return Ok(token);
+                var userId = await this.userService.RegisterPatientAsync(viewModel);
+                return Ok(userId);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Guid>> AddDoctor(DoctorForCreateViewModel viewModel)
+        {
+            try
+            {
+                var doctorId = await this.userService.AddDoctorAsync(viewModel);
+                return Ok(doctorId);
             }
             catch (Exception ex)
             {

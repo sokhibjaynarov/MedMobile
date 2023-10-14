@@ -4,6 +4,7 @@
 
 using MedMobile.Api.Brokers.Loggings;
 using MedMobile.Api.Brokers.UserManagement;
+using MedMobile.Api.Models.Users;
 using MedMobile.Api.ViewModels.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -56,6 +57,7 @@ namespace MedMobile.Api.Services.Identity
                 var authClaims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
