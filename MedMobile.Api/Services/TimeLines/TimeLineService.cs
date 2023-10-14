@@ -2,12 +2,12 @@
 // Copyright (c) DevZilla team
 // ---------------------------------------------------------------
 
+using MedMobile.Api.Brokers.StorageBrokers;
 using MedMobile.Api.Models.TimeLines;
 using Microsoft.Data.SqlClient;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
-using MedMobile.Api.Brokers.StorageBrokers;
 
 namespace MedMobile.Api.Services.TimeLines
 {

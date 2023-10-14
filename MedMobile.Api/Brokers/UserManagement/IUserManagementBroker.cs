@@ -4,6 +4,7 @@
 
 using MedMobile.Api.Models.Users;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,5 +17,7 @@ namespace MedMobile.Api.Brokers.UserManagement
         ValueTask<User> SelectUserByIdAsync(Guid userId);
         ValueTask<User> UpdateUserAsync(User user);
         ValueTask<User> DeleteUserAsync(User user);
+        ValueTask<bool> CheckPasswordAsync(User user, string password);
+        ValueTask<IList<string>> SelectAllUserRolesAsync(User user);
     }
 }
