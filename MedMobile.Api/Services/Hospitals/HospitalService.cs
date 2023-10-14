@@ -11,6 +11,7 @@ using MedMobile.Api.Brokers.StorageBrokers;
 using MedMobile.Api.Brokers.Loggings;
 using MedMobile.Api.ViewModels.Hospitals;
 using Microsoft.EntityFrameworkCore;
+using MedMobile.Api.StaticFunctions;
 
 namespace MedMobile.Api.Services.Hospitals
 {
@@ -59,7 +60,7 @@ namespace MedMobile.Api.Services.Hospitals
 
                 if (existHospital != null)
                 {
-                    throw new Exception();
+                    throw new Exception(ResponseMessages.ERROR_EXIST_DATA);
                 }
 
                 var newHospital = new Hospital()
@@ -69,7 +70,9 @@ namespace MedMobile.Api.Services.Hospitals
                     Email = viewModel.Email,
                     Location = viewModel.Location,
                     PhoneNumber = viewModel.PhoneNumber,
-                    Website = viewModel.Website
+                    Website = viewModel.Website,
+                    Longitude = viewModel.Longitude,
+                    Latitude = viewModel.Latitude
                 };
 
                 var hospital = await this.storageBroker.InsertHospitalAsync(newHospital);

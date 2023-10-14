@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedMobile.Api.Migrations
 {
     [DbContext(typeof(StorageBroker))]
-    [Migration("20231014190941_InitialMigration")]
+    [Migration("20231014201234_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -105,8 +105,14 @@ namespace MedMobile.Api.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
+
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");

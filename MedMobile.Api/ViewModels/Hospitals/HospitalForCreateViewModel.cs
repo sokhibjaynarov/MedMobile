@@ -19,6 +19,10 @@ namespace MedMobile.Api.ViewModels.Hospitals
 
         public string Website { get; set; }
 
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
+
         public string AdminEmail { get; set; }
         public string Password { get; set; }
     }
