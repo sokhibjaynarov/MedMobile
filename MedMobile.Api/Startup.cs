@@ -12,6 +12,7 @@ using MedMobile.Api.Models.Roles;
 using MedMobile.Api.Models.Users;
 using MedMobile.Api.Services.Doctors;
 using MedMobile.Api.Services.Fields;
+using MedMobile.Api.Services.Files;
 using MedMobile.Api.Services.Hospitals;
 using MedMobile.Api.Services.Identity;
 using MedMobile.Api.Services.Roles;
@@ -134,6 +135,7 @@ namespace MedMobile.Api
             services.AddScoped<ISessionService, SessionService>();
             services.AddScoped<ITimeLineService, TimeLineService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IFileService, FileService>();
         }
     }
 }
