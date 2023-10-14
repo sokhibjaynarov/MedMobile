@@ -80,7 +80,7 @@ namespace MedMobile.Api.Services.Fields
             {
                 var fieldQuery = storageBroker.SelectAllFields();
 
-                if (string.IsNullOrEmpty(searchText))
+                if (!string.IsNullOrEmpty(searchText))
                 {
                     searchText = searchText.ToLower();
                     fieldQuery = fieldQuery.Where(a => a.Name.ToLower() == searchText);
