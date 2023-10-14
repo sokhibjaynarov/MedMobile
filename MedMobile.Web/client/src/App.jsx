@@ -1,16 +1,14 @@
-import {useState} from 'react'
-import PlayingComponent from './conponents/PlayingComponent'
-import './App.css'
+import React from 'react';
+import "./App.css"
+import JitsimeetingComponents from "./components/JitsimeetingComponents"
 
+const App = () => {
 
-function App() {
-    const [count, setCount] = useState(0);
 
     return (
-        <>
-            <PlayingComponent/>
-        </>
-    )
+        <div className={"app"}>
+            <JitsimeetingComponents/>
+        </div>
+    );
 }
-
-export default App
+export default App;
