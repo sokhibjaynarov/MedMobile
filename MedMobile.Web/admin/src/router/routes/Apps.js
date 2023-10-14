@@ -85,55 +85,11 @@ const AppRoutes = [
     },
   },
   {
-    element: <Email />,
-    path: "/apps/email/:folder",
-    meta: {
-      appLayout: true,
-      className: "email-application",
-    },
-  },
-  {
-    element: <Email />,
-    path: "/apps/email/label/:label",
-    meta: {
-      appLayout: true,
-      className: "email-application",
-    },
-  },
-  {
-    element: <Email />,
-    path: "/apps/email/:filter",
-  },
-  {
     path: "/apps/chat",
     element: <Chat />,
     meta: {
       appLayout: true,
       className: "chat-application",
-    },
-  },
-  {
-    element: <Todo />,
-    path: "/apps/todo",
-    meta: {
-      appLayout: true,
-      className: "todo-application",
-    },
-  },
-  {
-    element: <Todo />,
-    path: "/apps/todo/:filter",
-    meta: {
-      appLayout: true,
-      className: "todo-application",
-    },
-  },
-  {
-    element: <Todo />,
-    path: "/apps/todo/tag/:tag",
-    meta: {
-      appLayout: true,
-      className: "todo-application",
     },
   },
   {
@@ -368,13 +324,6 @@ const AppRoutes = [
   {
     path: "/apps/ecommerce/product-detail/:product",
     element: <EcommerceDetail />,
-    meta: {
-      className: "ecommerce-application",
-    },
-  },
-  {
-    path: "/apps/ecommerce/checkout",
-    element: <EcommerceCheckout />,
     meta: {
       className: "ecommerce-application",
     },
