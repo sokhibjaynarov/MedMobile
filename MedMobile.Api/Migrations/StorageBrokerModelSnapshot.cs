@@ -150,8 +150,11 @@ namespace MedMobile.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("RejectedBy")
+                    b.Property<Guid?>("CanceledBy")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ReasonOfCanceling")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");

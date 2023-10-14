@@ -4,11 +4,11 @@
 
 using System;
 
-namespace MedMobile.Api.ViewModels.TimeLines
+namespace MedMobile.Api.ViewModels.Sessions
 {
-    public class TimeLineForRemoveViewModel
+    public class SessionForCancelViewModel
     {
-        public Guid TimeLineId { get; set; }
-        public string ReasonOfCanceling { get; set; }
+        public Guid SessionId { get; set; }
+        public string ReasonOfCancelling { get; set; }
     }
 }

@@ -8,80 +8,128 @@ using System.Linq;
 using System.Threading.Tasks;
 using System;
 using MedMobile.Api.Brokers.StorageBrokers;
+using MedMobile.Api.Brokers.Loggings;
+using MedMobile.Api.Models.TimeLines;
+using MedMobile.Api.ViewModels.Sessions;
+using MedMobile.Api.StaticFunctions;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace MedMobile.Api.Services.Sessions
 {
     public class SessionService : ISessionService
     {
+        private readonly ILoggingBroker loggingBroker;
         private readonly IStorageBroker storageBroker;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public SessionService(IStorageBroker storageBroker)
+        public SessionService(
+            ILoggingBroker loggingBroker, 
+            IStorageBroker storageBroker, 
+            IHttpContextAccessor httpContextAccessor)
         {
+            this.loggingBroker = loggingBroker;
             this.storageBroker = storageBroker;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
-        private delegate ValueTask<Session> ReturningSessionFunction();
-        private delegate IQueryable<Session> ReturningSessionsFunction();
-
-        private async ValueTask<Session> TryCatch(ReturningSessionFunction returningSessionFunction)
+        public async ValueTask<Guid> AddSessionAsync(SessionForCreateViewModel viewModel)
         {
             try
             {
-                return await returningSessionFunction();
+                var userId = Guid.Parse(httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                TimeLine timeLine = await storageBroker.SelectTimeLineByIdAsync(viewModel.TimeLineId);
+                
+                if (timeLine == null)
+                {
+                    throw new Exception(ResponseMessages.ERROR_NOT_FOUND_DATA);
+                }
+
+                var session = new Session
+                {
+                    TimeLineId = viewModel.TimeLineId,
+                    UserId = userId
+                };
+
+                Session createdSession = await storageBroker.InsertSessionAsync(session);
+                return createdSession.SessionId;
             }
             catch (Exception ex)
             {
-                throw new NotImplementedException();
+                loggingBroker.LogError(ex);
+                throw;
             }
         }
 
-        private IQueryable<Session> TryCatch(ReturningSessionsFunction returningSessionsFunction)
+
+        public async ValueTask<bool> CancelSessionAsync(SessionForCancelViewModel viewModel)
         {
             try
             {
-                return returningSessionsFunction();
+                var userId = Guid.Parse(httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                Session session = await storageBroker.SelectSessionByIdAsync(viewModel.SessionId);
+
+                if (session == null)
+                {
+                    throw new Exception(ResponseMessages.ERROR_NOT_FOUND_DATA);
+                }
+
+                TimeLine timeLine = await storageBroker.SelectTimeLineByIdAsync(session.TimeLineId);
+                if (session.UserId != userId && timeLine.DoctorUserId != userId)
+                {
+                    throw new Exception(ResponseMessages.ERROR_NOT_ALLOWED_DATA);
+                }
+
+                session.CanceledBy = userId;
+                session.ReasonOfCanceling = viewModel.ReasonOfCancelling;
+                session.Status = Status.Canceled;
+                await storageBroker.UpdateSessionAsync(session);
+                return true;
             }
-            catch (SqlException sqlException)
+            catch (Exception ex)
             {
-                throw new NotImplementedException();
+                loggingBroker.LogError(ex);
+                throw;
             }
         }
 
-        public ValueTask<Session> AddSessionAsync(Session session) =>
-        TryCatch(async () =>
+        public IQueryable<Session> RetrieveAllSessions()
         {
-            return await this.storageBroker.InsertSessionAsync(session);
-        });
-
-
-        public ValueTask<Session> ModifySessionAsync(Session session) =>
-            TryCatch(async () =>
+            try
             {
-                Session maybeSession =
-                    await this.storageBroker.SelectSessionByIdAsync(session.SessionId);
-                return await storageBroker.UpdateSessionAsync(session);
-            });
-
-
-        public ValueTask<Session> RemoveSessionByIdAsync(Guid sessionId) =>
-            TryCatch(async () =>
+                return null;
+            }
+            catch (Exception ex)
             {
-                Session maybeSession =
-                await this.storageBroker.SelectSessionByIdAsync(sessionId);
+                loggingBroker.LogError(ex);
+                throw;
+            }
+        }
 
-                return await storageBroker.DeleteSessionAsync(maybeSession);
-            });
-
-        public IQueryable<Session> RetrieveAllSessions() =>
-            TryCatch(() =>
-                 this.storageBroker.SelectAllSessions());
-
-        public ValueTask<Session> RetrieveSessionByIdAsync(Guid sessionId) =>
-            TryCatch(async () =>
+        public async ValueTask<SessionForGetViewModel> RetrieveSessionByIdAsync(Guid sessionId)
+        {
+            try
             {
-                Session maybeSession =
-                    await storageBroker.SelectSessionByIdAsync(sessionId);
-                return maybeSession;
-            });
+                Session session = await storageBroker.SelectSessionByIdAsync(sessionId);
+                TimeLine timeLine = await storageBroker.SelectTimeLineByIdAsync(session.TimeLineId);
+
+                SessionForGetViewModel result = new SessionForGetViewModel
+                {
+                    SessionId = session.SessionId,
+                    StartDateTime = timeLine.StartDateTime,
+                    EndDateTime = timeLine.EndDateTime,
+                    Status = session.Status,
+                    ReasonOfCanceling = session.ReasonOfCanceling,
+                    CanceledBy = session.CanceledBy
+                };
+                return result;
+            }
+            catch (Exception ex)
+            {
+                loggingBroker.LogError(ex);
+                throw;
+            }
+        }
     }
 }

@@ -20,17 +20,21 @@ namespace MedMobile.Api.Services.TimeLines
 {
     public class TimeLineService : ITimeLineService
     {
-        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly ILoggingBroker loggingBroker;
         private readonly IStorageBroker storageBroker;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public TimeLineService(ILoggingBroker loggingBroker, IStorageBroker storageBroker)
+        public TimeLineService(
+            ILoggingBroker loggingBroker, 
+            IStorageBroker storageBroker,
+            IHttpContextAccessor httpContextAccessor)
         {
             this.loggingBroker = loggingBroker;
             this.storageBroker = storageBroker;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
-        public async ValueTask<TimeLine> AddTimeLineAsync(TimeLineForCreateViewModel viewModel)
+        public async ValueTask<Guid> AddTimeLineAsync(TimeLineForCreateViewModel viewModel)
         {
             try
             {
@@ -56,7 +60,8 @@ namespace MedMobile.Api.Services.TimeLines
                     EndDateTime = viewModel.EndDateTime ?? viewModel.StartDateTime.AddMinutes(30)
                 };
 
-                return await storageBroker.InsertTimeLineAsync(timeLine);
+                TimeLine createdTimeLine = await storageBroker.InsertTimeLineAsync(timeLine);
+                return createdTimeLine.TimeLineId;
             }
             catch (Exception ex)
             {
@@ -75,7 +80,7 @@ namespace MedMobile.Api.Services.TimeLines
                     throw new Exception(ResponseMessages.ERROR_INVALID_DATA);
                 }
 
-                if (string.IsNullOrEmpty(viewModel.ReasonOfRejection))
+                if (string.IsNullOrEmpty(viewModel.ReasonOfCanceling))
                 {
                     throw new Exception(ResponseMessages.ERROR_INVALID_DATA);
                 }
@@ -96,9 +101,9 @@ namespace MedMobile.Api.Services.TimeLines
 
                 if (session != null)
                 {
-                    session.RejectedBy = Guid.Parse(doctorUserId);
-                    session.Status = Status.Rejected;
-                    session.ReasonOfRejection = viewModel.ReasonOfRejection;
+                    session.CanceledBy = Guid.Parse(doctorUserId);
+                    session.Status = Status.Canceled;
+                    session.ReasonOfCanceling = viewModel.ReasonOfCanceling;
                 }
 
                 await storageBroker.DeleteTimeLineAsync(timeLine);
@@ -111,7 +116,7 @@ namespace MedMobile.Api.Services.TimeLines
             }
         }
 
-        public async Task<IEnumerable<TimeLineForGetViewModel>> RetrieveDoctorTimeLines(Guid doctorUserId, DateTime? fromDateTime, DateTime? toDateTime)
+        public async Task<IEnumerable<TimeLineForGetViewModel>> RetrieveDoctorTimeLinesAsync(Guid doctorUserId, DateTime? fromDateTime, DateTime? toDateTime)
         {
             try
             {
