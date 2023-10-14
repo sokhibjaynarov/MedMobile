@@ -113,7 +113,6 @@ namespace MedMobile.Api.Data
             {
                 HospitalId = GovernmentHospitalId,
                 Email = "e-med@gov.uz",
-                Location = "Tashkent, Uzbekistan",
                 Name = "E-Gov medical",
                 PhoneNumber = "+998995551212",
                 Description = "Government medical center in Tashkent since 1990.",
@@ -125,7 +124,6 @@ namespace MedMobile.Api.Data
             {
                 HospitalId = PrivateHospitalId,
                 Email = "e-med@neutron.uz",
-                Location = "Tashkent, Uzbekistan",
                 Name = "Neutron medical",
                 PhoneNumber = "+998995551212",
                 Description = "Neutron medical center in Tashkent since 1990.",
