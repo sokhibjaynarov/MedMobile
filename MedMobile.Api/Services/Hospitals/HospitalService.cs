@@ -103,7 +103,7 @@ namespace MedMobile.Api.Services.Hospitals
             {
                 var hospitalQuery = storageBroker.SelectAllHospitals();
 
-                if (string.IsNullOrEmpty(searchText))
+                if (!string.IsNullOrEmpty(searchText))
                 {
                     searchText = searchText.ToLower();
                     hospitalQuery = hospitalQuery.Where(a => a.Name.ToLower() == searchText);
