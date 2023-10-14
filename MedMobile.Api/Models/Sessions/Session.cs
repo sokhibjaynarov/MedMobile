@@ -15,10 +15,10 @@ namespace MedMobile.Api.Models.Sessions
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid SessionId { get; set; }
 
-        [ForeignKey(nameof(TimeLine))]
+        //[ForeignKey(nameof(TimeLine))]
         public Guid TimeLineId { get; set; }
 
-        [ForeignKey(nameof(User))]
+        //[ForeignKey(nameof(User))]
         public Guid UserId { get; set; }
 
         public Guid? RejectedBy { get; set; }
@@ -26,8 +26,8 @@ namespace MedMobile.Api.Models.Sessions
         public Status Status { get; set; } = Status.Waiting;
 
 
-        public virtual User User { get; set; }
+        //public virtual User User { get; set; }
 
-        public virtual TimeLine TimeLine { get; set; }
+        //public virtual TimeLine TimeLine { get; set; }
     }
 }
