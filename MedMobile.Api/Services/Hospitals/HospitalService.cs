@@ -12,6 +12,9 @@ using MedMobile.Api.Brokers.Loggings;
 using MedMobile.Api.ViewModels.Hospitals;
 using Microsoft.EntityFrameworkCore;
 using MedMobile.Api.StaticFunctions;
+using System.Collections;
+using System.Collections.Generic;
+using MedMobile.Api.ViewModels.Pagination;
 
 namespace MedMobile.Api.Services.Hospitals
 {
@@ -20,36 +23,12 @@ namespace MedMobile.Api.Services.Hospitals
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
 
-        public HospitalService(IStorageBroker storageBroker)
+        public HospitalService(
+            IStorageBroker storageBroker,
+            ILoggingBroker loggingBroker)
         {
             this.storageBroker = storageBroker;
-        }
-
-        private delegate ValueTask<Hospital> ReturningHospitalFunction();
-        private delegate IQueryable<Hospital> ReturningHospitalsFunction();
-
-        private async ValueTask<Hospital> TryCatch(ReturningHospitalFunction returningHospitalFunction)
-        {
-            try
-            {
-                return await returningHospitalFunction();
-            }
-            catch (Exception ex)
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        private IQueryable<Hospital> TryCatch(ReturningHospitalsFunction returningHospitalsFunction)
-        {
-            try
-            {
-                return returningHospitalsFunction();
-            }
-            catch (SqlException sqlException)
-            {
-                throw new NotImplementedException();
-            }
+            this.loggingBroker = loggingBroker;
         }
 
         public async ValueTask<Guid> AddHospitalAsync(HospitalForCreateViewModel viewModel)
@@ -75,45 +54,81 @@ namespace MedMobile.Api.Services.Hospitals
                     Latitude = viewModel.Latitude
                 };
 
-                var hospital = await this.storageBroker.InsertHospitalAsync(newHospital);
+                var hospital = await storageBroker.InsertHospitalAsync(newHospital);
 
                 return hospital.HospitalId;
             }
             catch (Exception ex)
             {
-                this.loggingBroker.LogError(ex);
+                loggingBroker.LogError(ex);
                 throw;
             }
         }
 
 
-        public ValueTask<Hospital> ModifyHospitalAsync(Hospital hospital) =>
-            TryCatch(async () =>
-            {
-                Hospital maybeHospital =
-                    await this.storageBroker.SelectHospitalByIdAsync(hospital.HospitalId);
-                return await storageBroker.UpdateHospitalAsync(hospital);
-            });
-
-
-        public ValueTask<Hospital> RemoveHospitalByIdAsync(Guid hospitalId) =>
-            TryCatch(async () =>
-            {
-                Hospital maybeHospital =
-                await this.storageBroker.SelectHospitalByIdAsync(hospitalId);
-
-                return await storageBroker.DeleteHospitalAsync(maybeHospital);
-            });
-
-        public IQueryable<Hospital> GetAllHospitals()
+        public async ValueTask<Hospital> ModifyHospitalAsync(Hospital hospital)
         {
             try
             {
-                return this.storageBroker.SelectAllHospitals();
+                Hospital maybeHospital =
+                    await storageBroker.SelectHospitalByIdAsync(hospital.HospitalId);
+                return await storageBroker.UpdateHospitalAsync(hospital);
             }
             catch (Exception ex)
             {
-                this.loggingBroker.LogError(ex);
+                loggingBroker.LogError(ex);
+                throw;
+            }
+        }
+
+
+        public async ValueTask<Hospital> RemoveHospitalByIdAsync(Guid hospitalId)
+        {
+            try
+            {
+                Hospital maybeHospital =
+                await storageBroker.SelectHospitalByIdAsync(hospitalId);
+
+                return await storageBroker.DeleteHospitalAsync(maybeHospital);
+            }
+            catch (Exception ex)
+            {
+                loggingBroker.LogError(ex);
+                throw;
+            }
+        }
+
+        public async Task<PaginationResponse> GetAllHospitalsAsync(string searchText, int skip, int take)
+        {
+            try
+            {
+                var hospitalQuery = storageBroker.SelectAllHospitals();
+
+                if (string.IsNullOrEmpty(searchText))
+                {
+                    searchText = searchText.ToLower();
+                    hospitalQuery = hospitalQuery.Where(a => a.Name.ToLower() == searchText);
+                }
+
+                var count = hospitalQuery.Count();
+
+                var hospitals = hospitalQuery.Select(a => new HospitalForGetViewModel
+                {
+                    HospitalId = a.HospitalId,
+                    Name = a.Name,
+                    Description = a.Description,
+                    Longitude = a.Longitude,
+                    Latitude = a.Latitude,
+                    Website = a.Website,
+                    Email = a.Email,
+                    PhoneNumber = a.PhoneNumber
+                });
+
+                return new PaginationResponse(hospitals, skip, take, count);
+            }
+            catch (Exception ex)
+            {
+                loggingBroker.LogError(ex);
                 throw;
             }
         }
@@ -128,7 +143,7 @@ namespace MedMobile.Api.Services.Hospitals
             }
             catch (Exception ex)
             {
-                this.loggingBroker.LogError(ex);
+                loggingBroker.LogError(ex);
                 throw;
             }
         }
