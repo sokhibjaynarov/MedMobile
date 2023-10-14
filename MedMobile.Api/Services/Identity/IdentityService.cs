@@ -81,7 +81,7 @@ namespace MedMobile.Api.Services.Identity
             }
             catch (Exception ex)
             {
-                loggingBroker.LogError(ex);
+                this.loggingBroker.LogError(ex);
                 throw;
             }
         }

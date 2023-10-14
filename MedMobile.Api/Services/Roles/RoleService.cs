@@ -38,7 +38,7 @@ namespace MedMobile.Api.Services.Roles
             }
             catch (Exception ex)
             {
-                loggingBroker.LogError(ex);
+                this.loggingBroker.LogError(ex);
                 throw;
             }
         }
@@ -51,7 +51,7 @@ namespace MedMobile.Api.Services.Roles
             }
             catch (Exception ex)
             {
-                loggingBroker.LogError(ex);
+                this.loggingBroker.LogError(ex);
                 throw;
             }
         }
@@ -71,7 +71,7 @@ namespace MedMobile.Api.Services.Roles
             }
             catch (Exception ex)
             {
-                loggingBroker.LogError(ex);
+                this.loggingBroker.LogError(ex);
                 throw;
             }
         }
