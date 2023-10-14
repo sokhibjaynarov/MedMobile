@@ -10,8 +10,12 @@ using MedMobile.Api.Configurations;
 using MedMobile.Api.Models.Roles;
 using MedMobile.Api.Models.Users;
 using MedMobile.Api.Services.Doctors;
+using MedMobile.Api.Services.Fields;
 using MedMobile.Api.Services.Hospitals;
 using MedMobile.Api.Services.Identity;
+using MedMobile.Api.Services.Roles;
+using MedMobile.Api.Services.Sessions;
+using MedMobile.Api.Services.TimeLines;
 using MedMobile.Api.Services.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -113,10 +117,14 @@ namespace MedMobile.Api
 
         private static void AddServices(IServiceCollection services)
         {
-            services.AddScoped<IIdentityService, IdentityService>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IHospitalService, HospitalService>();
             services.AddScoped<IDoctorService, DoctorService>();
+            services.AddScoped<IFieldService, FieldService>();
+            services.AddScoped<IHospitalService, HospitalService>();
+            services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<ISessionService, SessionService>();
+            services.AddScoped<ITimeLineService, TimeLineService>();
+            services.AddScoped<IUserService, UserService>();
         }
     }
 }

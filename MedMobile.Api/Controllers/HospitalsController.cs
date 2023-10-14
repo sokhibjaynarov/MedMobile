@@ -57,11 +57,11 @@ namespace MedMobile.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<Hospital>> GetHospitalById(Guid doctorId)
+        public async Task<ActionResult<Hospital>> GetHospitalById(Guid hospitalId)
         {
             try
             {
-                var hospital = this.hospitalService.GetHospitalByIdAsync(doctorId);
+                var hospital = this.hospitalService.GetHospitalByIdAsync(hospitalId);
                 return Ok(hospital);
             }
             catch (Exception ex)
