@@ -10,6 +10,7 @@ using MedMobile.Api.Configurations;
 using MedMobile.Api.Models.Roles;
 using MedMobile.Api.Models.Users;
 using MedMobile.Api.Services.Identity;
+using MedMobile.Api.Services.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -100,6 +101,7 @@ namespace MedMobile.Api
         private static void AddServices(IServiceCollection services)
         {
             services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<IUserService, UserService>();
         }
     }
 }
