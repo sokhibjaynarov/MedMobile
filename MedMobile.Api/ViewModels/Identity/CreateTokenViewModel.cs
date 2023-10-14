@@ -4,7 +4,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace MedMobile.Api.ViewModels
+namespace MedMobile.Api.ViewModels.Identity
 {
     public class CreateTokenViewModel
     {

@@ -4,7 +4,7 @@
 
 using MedMobile.Api.Brokers.Loggings;
 using MedMobile.Api.Brokers.UserManagement;
-using MedMobile.Api.ViewModels;
+using MedMobile.Api.ViewModels.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

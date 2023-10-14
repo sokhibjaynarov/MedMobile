@@ -2,7 +2,7 @@
 // Copyright (c) DevZilla team
 // ---------------------------------------------------------------
 
-using MedMobile.Api.ViewModels;
+using MedMobile.Api.ViewModels.Identity;
 using System.Threading.Tasks;
 
 namespace MedMobile.Api.Services.Identity

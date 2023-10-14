@@ -2,7 +2,6 @@
 // Copyright (c) DevZilla team
 // ---------------------------------------------------------------
 
-using FluentAssertions.Common;
 using MedMobile.Api.Brokers.Loggings;
 using MedMobile.Api.Brokers.RoleManagement;
 using MedMobile.Api.Brokers.StorageBrokers;
@@ -10,13 +9,7 @@ using MedMobile.Api.Brokers.UserManagement;
 using MedMobile.Api.Configurations;
 using MedMobile.Api.Models.Roles;
 using MedMobile.Api.Models.Users;
-using MedMobile.Api.Services.Doctors;
-using MedMobile.Api.Services.Fields;
-using MedMobile.Api.Services.Hospitals;
 using MedMobile.Api.Services.Identity;
-using MedMobile.Api.Services.Persons;
-using MedMobile.Api.Services.Sessions;
-using MedMobile.Api.Services.TimeLines;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
