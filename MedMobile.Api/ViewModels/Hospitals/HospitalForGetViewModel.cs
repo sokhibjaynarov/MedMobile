@@ -1,14 +1,13 @@
-﻿// --------------------------------------------------------------- 
-// Copyright (c) DevZilla team
-// ---------------------------------------------------------------
-
-using MedMobile.Api.ViewModels.Users;
+﻿using System;
 
 namespace MedMobile.Api.ViewModels.Hospitals
 {
-    public class HospitalForCreateViewModel
+    public class HospitalForGetViewModel
     {
+        public Guid HospitalId { get; set; }
+
         public string Name { get; set; }
+
         public string Description { get; set; }
 
         public string PhoneNumber { get; set; }
@@ -20,9 +19,5 @@ namespace MedMobile.Api.ViewModels.Hospitals
         public double Latitude { get; set; }
 
         public double Longitude { get; set; }
-
-        public string AdminEmail { get; set; }
-
-        public string Password { get; set; }
     }
 }

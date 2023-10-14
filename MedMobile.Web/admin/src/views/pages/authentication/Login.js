@@ -149,33 +149,8 @@ const Login = () => {
         >
           <Col className="px-xl-2 mx-auto" sm="8" md="6" lg="12">
             <CardTitle tag="h2" className="text-left fw-bold mb-1">
-              Welcome to MedMobile! 👋
+              MedMobilega xush kelibsiz!
             </CardTitle>
-            <Alert color="primary">
-              <div className="alert-body font-small-2">
-                <p>
-                  <small className="me-50">
-                    <span className="fw-bold">Admin:</span> admin@demo.com |
-                    admin
-                  </small>
-                </p>
-                <p>
-                  <small className="me-50">
-                    <span className="fw-bold">Client:</span> client@demo.com |
-                    client
-                  </small>
-                </p>
-              </div>
-              <HelpCircle
-                id="login-tip"
-                className="position-absolute"
-                size={18}
-                style={{ top: "10px", right: "10px" }}
-              />
-              <UncontrolledTooltip target="login-tip" placement="left">
-                This is just for ACL demo purpose.
-              </UncontrolledTooltip>
-            </Alert>
             <Form
               className="auth-login-form mt-2"
               onSubmit={handleSubmit(onSubmit)}
@@ -205,10 +180,10 @@ const Login = () => {
               <div className="mb-1">
                 <div className="d-flex justify-content-between">
                   <Label className="form-label" for="login-password">
-                    Password
+                    Parol
                   </Label>
                   <Link to="/forgot-password">
-                    <small>Forgot Password?</small>
+                    <small>Parolni unutdingizmi?</small>
                   </Link>
                 </div>
                 <Controller
@@ -224,14 +199,8 @@ const Login = () => {
                   )}
                 />
               </div>
-              <div className="form-check mb-1">
-                <Input type="checkbox" id="remember-me" />
-                <Label className="form-check-label" for="remember-me">
-                  Remember Me
-                </Label>
-              </div>
               <Button type="submit" color="primary" block>
-                Sign in
+                Kirish
               </Button>
             </Form>
           </Col>

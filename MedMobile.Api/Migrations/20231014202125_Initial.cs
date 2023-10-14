@@ -39,7 +39,10 @@ namespace MedMobile.Api.Migrations
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Website = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Website = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Latitude = table.Column<double>(type: "float", nullable: false),
+                    Longitude = table.Column<double>(type: "float", nullable: false),
+                    AdminUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -144,49 +147,28 @@ namespace MedMobile.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Sessions",
-                schema: "MedMobile",
-                columns: table => new
-                {
-                    SessionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TimeLineId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CanceledBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ReasonOfCanceling = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Sessions", x => x.SessionId);
-                    table.ForeignKey(
-                        name: "FK_Sessions_User_UserId",
-                        column: x => x.UserId,
-                        principalSchema: "MedMobile",
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TimeLines",
                 schema: "MedMobile",
                 columns: table => new
                 {
                     TimeLineId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DoctorUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EventUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StartDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDateTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    EndDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TimeLines", x => x.TimeLineId);
                     table.ForeignKey(
-                        name: "FK_TimeLines_User_DoctorUserId",
-                        column: x => x.DoctorUserId,
+                        name: "FK_TimeLines_User_UserId",
+                        column: x => x.UserId,
                         principalSchema: "MedMobile",
                         principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -311,6 +293,37 @@ namespace MedMobile.Api.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Sessions",
+                schema: "MedMobile",
+                columns: table => new
+                {
+                    SessionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TimeLineId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CanceledBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ReasonOfCanceling = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sessions", x => x.SessionId);
+                    table.ForeignKey(
+                        name: "FK_Sessions_TimeLines_TimeLineId",
+                        column: x => x.TimeLineId,
+                        principalSchema: "MedMobile",
+                        principalTable: "TimeLines",
+                        principalColumn: "TimeLineId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Sessions_User_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "MedMobile",
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_DoctorFields_DoctorId",
                 schema: "MedMobile",
@@ -352,16 +365,22 @@ namespace MedMobile.Api.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Sessions_TimeLineId",
+                schema: "MedMobile",
+                table: "Sessions",
+                column: "TimeLineId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Sessions_UserId",
                 schema: "MedMobile",
                 table: "Sessions",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TimeLines_DoctorUserId",
+                name: "IX_TimeLines_UserId",
                 schema: "MedMobile",
                 table: "TimeLines",
-                column: "DoctorUserId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -412,10 +431,6 @@ namespace MedMobile.Api.Migrations
                 schema: "MedMobile");
 
             migrationBuilder.DropTable(
-                name: "TimeLines",
-                schema: "MedMobile");
-
-            migrationBuilder.DropTable(
                 name: "UserClaims",
                 schema: "MedMobile");
 
@@ -437,6 +452,10 @@ namespace MedMobile.Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Fields",
+                schema: "MedMobile");
+
+            migrationBuilder.DropTable(
+                name: "TimeLines",
                 schema: "MedMobile");
 
             migrationBuilder.DropTable(

@@ -93,14 +93,23 @@ namespace MedMobile.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("AdminUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
+
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -167,6 +176,8 @@ namespace MedMobile.Api.Migrations
 
                     b.HasKey("SessionId");
 
+                    b.HasIndex("TimeLineId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Sessions", "MedMobile");
@@ -178,18 +189,30 @@ namespace MedMobile.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("DoctorUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("EndDateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("EventUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("StartDateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("TimeLineId");
 
-                    b.HasIndex("DoctorUserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("TimeLines", "MedMobile");
                 });
@@ -415,22 +438,28 @@ namespace MedMobile.Api.Migrations
 
             modelBuilder.Entity("MedMobile.Api.Models.Sessions.Session", b =>
                 {
-                    b.HasOne("MedMobile.Api.Models.Users.User", null)
+                    b.HasOne("MedMobile.Api.Models.TimeLines.TimeLine", "TimeLine")
+                        .WithMany()
+                        .HasForeignKey("TimeLineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MedMobile.Api.Models.Users.User", "User")
                         .WithMany("Sessions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("TimeLine");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MedMobile.Api.Models.TimeLines.TimeLine", b =>
                 {
-                    b.HasOne("MedMobile.Api.Models.Users.User", "User")
+                    b.HasOne("MedMobile.Api.Models.Users.User", null)
                         .WithMany("TimeLines")
-                        .HasForeignKey("DoctorUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

@@ -69,7 +69,10 @@ namespace MedMobile.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PaginationResponse>> GetAllSessions(List<Guid> doctorIds, List<Guid> userIds, List<Status> statuses, int skip, int take)
+        public async Task<ActionResult<PaginationResponse>> GetAllSessions(
+            [FromQuery]List<Guid> doctorIds, 
+            [FromQuery]List<Guid> userIds, 
+            [FromQuery]List<Status> statuses, int skip = 0, int take = 20)
         {
             try
             {
