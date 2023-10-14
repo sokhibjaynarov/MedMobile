@@ -2,10 +2,10 @@
 // Copyright (c) DevZilla team
 // ---------------------------------------------------------------
 
+using MedMobile.Api.Models.Roles;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
-using MedMobile.Api.Models.Roles;
 
 namespace MedMobile.Api.Brokers.RoleManagement
 {

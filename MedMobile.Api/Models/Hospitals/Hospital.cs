@@ -2,11 +2,11 @@
 // Copyright (c) DevZilla team
 // ---------------------------------------------------------------
 
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic;
 using MedMobile.Api.Models.Doctors;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedMobile.Api.Models.Hospitals
 {
@@ -25,7 +25,7 @@ namespace MedMobile.Api.Models.Hospitals
 
         public string Website { get; set; }
 
-        
+
         public virtual List<Doctor> Doctors { get; set; }
     }
 }

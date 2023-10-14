@@ -2,11 +2,11 @@
 // Copyright (c) DevZilla team
 // ---------------------------------------------------------------
 
+using MedMobile.Api.Models.Users;
 using Microsoft.AspNetCore.Identity;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
-using MedMobile.Api.Models.Users;
 
 namespace MedMobile.Api.Brokers.UserManagement
 {

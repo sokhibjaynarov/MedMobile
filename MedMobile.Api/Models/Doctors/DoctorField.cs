@@ -21,7 +21,7 @@ namespace MedMobile.Api.Models.Doctors
         public Guid FieldId { get; set; }
 
         public virtual Field Field { get; set; }
-        
+
         public virtual Doctor Doctor { get; set; }
     }
 }
