@@ -5,6 +5,7 @@ using MedMobile.Api.Models.Hospitals;
 using MedMobile.Api.Models.Roles;
 using MedMobile.Api.Models.Users;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -122,7 +123,7 @@ namespace MedMobile.Api.Data
                 PhoneNumber = "+998995551212",
                 Description = "Neutron medical center in Tashkent since 1990.",
                 Website = "e-med.neutron.uz",
-                AdminUserId = GovernmentHospitalAdminId
+                AdminUserId = PrivateHospitalAdminId
             };
 
             if (await broker.SelectHospitalByIdAsync(PrivateHospitalId) == null)
@@ -175,7 +176,7 @@ namespace MedMobile.Api.Data
             }
         }
 
-        public static async Task SeedHospitalDoctorsAsync(UserManager<User> userManager, RoleManager<Role> roleManager)
+        public static async Task SeedHospitalDoctorsAsync(UserManager<User> userManager, RoleManager<Role> roleManager, StorageBroker broker)
         {
             var govermentHospitalUserDoctorAllergist = new User()
             {
@@ -198,33 +199,78 @@ namespace MedMobile.Api.Data
                 Description = "12 years ultra pro max Allergist"
             };
 
-            var privateHospitalAdmin = new User()
+            if (userManager.Users.All(u => u.Id != govermentHospitalUserDoctorAllergist.Id))
+            {
+                var user = await userManager.FindByEmailAsync(govermentHospitalUserDoctorAllergist.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(govermentHospitalUserDoctorAllergist, "123");
+                    await userManager.AddToRoleAsync(govermentHospitalUserDoctorAllergist, Roles.Doctor.ToString());
+                }
+            }
+
+            if (await broker.SelectDoctorByIdAsync(govermentHospitalDoctorAllergist.DoctorId) == null)
+            {
+                await broker.InsertDoctorAsync(govermentHospitalDoctorAllergist);
+            }
+
+            var privateHospitalUserDoctorCardiologist = new User()
             {
                 UserName = "privateadmin@gmail.com",
                 Email = "privateadmin@gmail.com",
                 EmailConfirmed = true,
-                PhoneNumberConfirmed = true
+                PhoneNumberConfirmed = true,
+                FirstName = "Sardor",
+                LastName = "To'ymurodov",
+                FatherName = "Alisher",
+                PassportNumber = "AA123137",
+                PhoneNumber = "+998995822929"
             };
 
-            //if (userManager.Users.All(u => u.Id != govermentHospitalAdmin.Id))
-            //{
-            //    var user = await userManager.FindByEmailAsync(govermentHospitalAdmin.Email);
-            //    if (user == null)
-            //    {
-            //        await userManager.CreateAsync(govermentHospitalAdmin, "123");
-            //        await userManager.AddToRoleAsync(govermentHospitalAdmin, Roles.Admin.ToString());
-            //    }
-            //}
+            var privateHospitalDoctorCardiologist = new Doctor()
+            {
+                DoctorId = DoctorCardiologistId,
+                HospitalId = PrivateHospitalId,
+                UserId = privateHospitalUserDoctorCardiologist.Id,
+                Description = "12 years ultra pro max Allergist"
+            };
 
-            //if (userManager.Users.All(u => u.Id != privateHospitalAdmin.Id))
-            //{
-            //    var user = await userManager.FindByEmailAsync(privateHospitalAdmin.Email);
-            //    if (user == null)
-            //    {
-            //        await userManager.CreateAsync(privateHospitalAdmin, "123");
-            //        await userManager.AddToRoleAsync(privateHospitalAdmin, Roles.Admin.ToString());
-            //    }
-            //}
+            if (userManager.Users.All(u => u.Id != privateHospitalUserDoctorCardiologist.Id))
+            {
+                var user = await userManager.FindByEmailAsync(privateHospitalUserDoctorCardiologist.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(privateHospitalUserDoctorCardiologist, "123");
+                    await userManager.AddToRoleAsync(privateHospitalUserDoctorCardiologist, Roles.Doctor.ToString());
+                }
+            }
+
+            if (await broker.SelectDoctorByIdAsync(privateHospitalDoctorCardiologist.DoctorId) == null)
+            {
+                await broker.InsertDoctorAsync(privateHospitalDoctorCardiologist);
+            }
+
+            var govermentAllergistDoctorField = new DoctorField()
+            {
+                DoctorId = DoctorAllergistId,
+                FieldId = AllergistFieldId
+            };
+
+            var privateCardiologistDoctorField = new DoctorField()
+            {
+                DoctorId = DoctorCardiologistId,
+                FieldId = CardiologistFieldId
+            };
+
+            if (await broker.SelectAllDoctorFields().FirstOrDefaultAsync(p => p.DoctorId == DoctorAllergistId && p.FieldId == AllergistFieldId) == null)
+            {
+                await broker.InsertDoctorFieldAsync(govermentAllergistDoctorField);
+            }
+
+            if (await broker.SelectAllDoctorFields().FirstOrDefaultAsync(p => p.DoctorId == DoctorCardiologistId && p.FieldId == CardiologistFieldId) == null)
+            {
+                await broker.InsertDoctorFieldAsync(privateCardiologistDoctorField);
+            }
         }
     }
 }

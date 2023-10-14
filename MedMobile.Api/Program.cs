@@ -32,6 +32,10 @@ namespace MedMobile.Api
                     var roleManager = services.GetRequiredService<RoleManager<Role>>();
                     await SeedData.SeedRolesAsync(userManager, roleManager);
                     await SeedData.SeedSuperAdminsAsync(userManager, roleManager);
+                    await SeedData.SeedHospitalAdminsAsync(userManager, roleManager);
+                    await SeedData.SeedHospitalsAsync(context);
+                    await SeedData.SeedFieldAsync(context);
+                    await SeedData.SeedHospitalDoctorsAsync(userManager, roleManager, context);
                 }
                 catch (Exception ex)
                 {
