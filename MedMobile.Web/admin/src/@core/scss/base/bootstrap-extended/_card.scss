@@ -377,6 +377,7 @@
   }
 
   .design-planning-wrapper {
+    width: 100%;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -385,8 +386,8 @@
     }
 
     .design-planning {
-      padding: 0.5rem;
-      margin-bottom: 0.7rem;
+
+      margin-bottom: 0.2rem;
       text-align: center;
       background-color: $body-bg;
       border-radius: $border-radius;

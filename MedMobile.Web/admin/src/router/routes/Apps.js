@@ -321,7 +321,7 @@ const AppRoutes = [
   },
   {
     element: <UserList />,
-    path: "/apps/user/list",
+    path: "/apps/hospitals",
   },
   {
     path: "/apps/user/view",

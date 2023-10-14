@@ -115,8 +115,8 @@ const Login = () => {
           console.log({ err });
           setError("loginEmail", {
             type: "manual",
-            // message: err.response.data.error,
-            message: "Message ",
+            message: err.message,
+            // message: "Message ",
           });
         });
     } else {
