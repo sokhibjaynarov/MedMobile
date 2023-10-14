@@ -1,0 +1,20 @@
+.badge {
+  padding: 8px;
+  text-transform: uppercase;
+}
+.fullname {
+  color: #005665;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+.details {
+  padding: 0;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+  justify-content: space-between;
+  li {
+    width: 33.3%;
+  }
+}

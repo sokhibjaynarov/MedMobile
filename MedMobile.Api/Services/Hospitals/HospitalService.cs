@@ -111,17 +111,18 @@ namespace MedMobile.Api.Services.Hospitals
 
                 var count = hospitalQuery.Count();
 
-                var hospitals = hospitalQuery.Select(a => new HospitalForGetViewModel
-                {
-                    HospitalId = a.HospitalId,
-                    Name = a.Name,
-                    Description = a.Description,
-                    Longitude = a.Longitude,
-                    Latitude = a.Latitude,
-                    Website = a.Website,
-                    Email = a.Email,
-                    PhoneNumber = a.PhoneNumber
-                });
+                var hospitals = hospitalQuery.OrderBy(a => a.Name)
+                    .Select(a => new HospitalForGetViewModel
+                    {
+                        HospitalId = a.HospitalId,
+                        Name = a.Name,
+                        Description = a.Description,
+                        Longitude = a.Longitude,
+                        Latitude = a.Latitude,
+                        Website = a.Website,
+                        Email = a.Email,
+                        PhoneNumber = a.PhoneNumber
+                    }).Skip(skip).Take(take).ToList();
 
                 return new PaginationResponse(hospitals, skip, take, count);
             }

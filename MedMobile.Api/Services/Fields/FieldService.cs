@@ -8,80 +8,115 @@ using System.Linq;
 using System.Threading.Tasks;
 using System;
 using MedMobile.Api.Brokers.StorageBrokers;
+using MedMobile.Api.Brokers.Loggings;
+using MedMobile.Api.Models.Hospitals;
+using MedMobile.Api.ViewModels.Pagination;
+using MedMobile.Api.ViewModels.Fields;
 
 namespace MedMobile.Api.Services.Fields
 {
     public class FieldService : IFieldService
     {
+        private readonly ILoggingBroker loggingBroker;
         private readonly IStorageBroker storageBroker;
 
-        public FieldService(IStorageBroker storageBroker)
+        public FieldService(
+            ILoggingBroker loggingBroker,
+            IStorageBroker storageBroker)
         {
+            this.loggingBroker = loggingBroker;
             this.storageBroker = storageBroker;
         }
 
-        private delegate ValueTask<Field> ReturningFieldFunction();
-        private delegate IQueryable<Field> ReturningFieldsFunction();
-
-        private async ValueTask<Field> TryCatch(ReturningFieldFunction returningFieldFunction)
+        public async ValueTask<Field> AddFieldAsync(Field field)
         {
             try
             {
-                return await returningFieldFunction();
+                return await this.storageBroker.InsertFieldAsync(field);
             }
             catch (Exception ex)
             {
-                throw new NotImplementedException();
+                loggingBroker.LogError(ex);
+                throw;
             }
         }
 
-        private IQueryable<Field> TryCatch(ReturningFieldsFunction returningFieldsFunction)
+
+        public async ValueTask<Field> ModifyFieldAsync(Field field)
         {
             try
-            {
-                return returningFieldsFunction();
-            }
-            catch (SqlException sqlException)
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public ValueTask<Field> AddFieldAsync(Field field) =>
-        TryCatch(async () =>
-        {
-            return await this.storageBroker.InsertFieldAsync(field);
-        });
-
-
-        public ValueTask<Field> ModifyFieldAsync(Field field) =>
-            TryCatch(async () =>
             {
                 Field maybeField =
                     await this.storageBroker.SelectFieldByIdAsync(field.FieldId);
                 return await storageBroker.UpdateFieldAsync(field);
-            });
+            }
+            catch (Exception ex)
+            {
+                loggingBroker.LogError(ex);
+                throw;
+            }
+        }
 
 
-        public ValueTask<Field> RemoveFieldByIdAsync(Guid fieldId) =>
-            TryCatch(async () =>
+        public async ValueTask<Field> RemoveFieldByIdAsync(Guid fieldId)
+        {
+            try
             {
                 Field maybeField =
                 await this.storageBroker.SelectFieldByIdAsync(fieldId);
 
                 return await storageBroker.DeleteFieldAsync(maybeField);
-            });
+            }
+            catch (Exception ex)
+            {
+                loggingBroker.LogError(ex);
+                throw;
+            }
+        }
 
-        public IQueryable<Field> GetAllFields() =>
-            TryCatch(() =>
-                 this.storageBroker.SelectAllFields());
+        public async Task<PaginationResponse> GetAllFieldsAsync(string searchText, int skip, int take)
+        {
+            try
+            {
+                var fieldQuery = storageBroker.SelectAllFields();
 
-        public ValueTask<Field> GetFieldByIdAsync(Guid fieldId) =>
-            TryCatch(async () =>
+                if (string.IsNullOrEmpty(searchText))
+                {
+                    searchText = searchText.ToLower();
+                    fieldQuery = fieldQuery.Where(a => a.Name.ToLower() == searchText);
+                }
+
+                var count = fieldQuery.Count();
+
+                var fields = fieldQuery.OrderBy(a => a.Name).Select(a => new FieldForGetViewModel
+                {
+                    FieldId = a.FieldId,
+                    Name = a.Name,
+                    Description = a.Description
+                }).Skip(skip).Take(take).ToList();
+
+                return new PaginationResponse(fields, skip, take, count);
+            }
+            catch (Exception ex)
+            {
+                loggingBroker.LogError(ex);
+                throw;
+            }
+        }
+
+        public async ValueTask<Field> GetFieldByIdAsync(Guid fieldId)
+        {
+            try
             {
                 Field maybeField =
                     await storageBroker.SelectFieldByIdAsync(fieldId);
                 return maybeField;
-            });
+            }
+            catch (Exception ex)
+            {
+                loggingBroker.LogError(ex);
+                throw;
+            }
+        }
     }
 }
