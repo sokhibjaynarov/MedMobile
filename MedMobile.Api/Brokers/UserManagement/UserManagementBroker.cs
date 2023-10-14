@@ -2,9 +2,11 @@
 // Copyright (c) DevZilla team
 // ---------------------------------------------------------------
 
+using MedMobile.Api.Models.Roles;
 using MedMobile.Api.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -50,5 +52,11 @@ namespace MedMobile.Api.Brokers.UserManagement
 
             return user;
         }
+
+        public async ValueTask<bool> CheckPasswordAsync(User user, string password) 
+            => await this.userManagement.CheckPasswordAsync(user, password);
+
+        public async ValueTask<IList<string>> SelectAllUserRolesAsync(User user) 
+            => await this.userManagement.GetRolesAsync(user);
     }
 }

@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------
 
 using MedMobile.Api.Models.Roles;
+using MedMobile.Api.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Linq;
