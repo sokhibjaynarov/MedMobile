@@ -6,15 +6,15 @@ using MedMobile.Api.Models.Sessions;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using MedMobile.Api.ViewModels.Sessions;
 
 namespace MedMobile.Api.Services.Sessions
 {
     public interface ISessionService
     {
-        ValueTask<Session> AddSessionAsync(Session session);
+        ValueTask<Guid> AddSessionAsync(SessionForCreateViewModel session);
+        ValueTask<bool> CancelSessionAsync(SessionForCancelViewModel viewModel);
         IQueryable<Session> RetrieveAllSessions();
-        ValueTask<Session> RetrieveSessionByIdAsync(Guid sessionId);
-        ValueTask<Session> ModifySessionAsync(Session session);
-        ValueTask<Session> RemoveSessionByIdAsync(Guid sessionId);
+        ValueTask<SessionForGetViewModel> RetrieveSessionByIdAsync(Guid sessionId);
     }
 }

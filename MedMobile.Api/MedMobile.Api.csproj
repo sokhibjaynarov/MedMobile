@@ -19,8 +19,6 @@
 
   <ItemGroup>
     <Folder Include="ViewModels\Fields\" />
-    <Folder Include="ViewModels\Hospitals\" />
-    <Folder Include="ViewModels\Sessions\" />
     <Folder Include="ViewModels\Persons\" />
   </ItemGroup>
 

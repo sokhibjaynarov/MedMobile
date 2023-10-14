@@ -8,12 +8,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using System;
 using MedMobile.Api.Brokers.StorageBrokers;
+using MedMobile.Api.Brokers.Loggings;
+using MedMobile.Api.ViewModels.Hospitals;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedMobile.Api.Services.Hospitals
 {
     public class HospitalService : IHospitalService
     {
         private readonly IStorageBroker storageBroker;
+        private readonly ILoggingBroker loggingBroker;
 
         public HospitalService(IStorageBroker storageBroker)
         {
@@ -47,11 +51,37 @@ namespace MedMobile.Api.Services.Hospitals
             }
         }
 
-        public ValueTask<Hospital> AddHospitalAsync(Hospital hospital) =>
-        TryCatch(async () =>
+        public async ValueTask<Guid> AddHospitalAsync(HospitalForCreateViewModel viewModel)
         {
-            return await this.storageBroker.InsertHospitalAsync(hospital);
-        });
+            try
+            {
+                var existHospital = await this.storageBroker.SelectAllHospitals().FirstOrDefaultAsync(p => p.Name == viewModel.Name);
+
+                if (existHospital != null)
+                {
+                    throw new Exception();
+                }
+
+                var newHospital = new Hospital()
+                {
+                    Name = viewModel.Name,
+                    Description = viewModel.Description,
+                    Email = viewModel.Email,
+                    Location = viewModel.Location,
+                    PhoneNumber = viewModel.PhoneNumber,
+                    Website = viewModel.Website
+                };
+
+                var hospital = await this.storageBroker.InsertHospitalAsync(newHospital);
+
+                return hospital.HospitalId;
+            }
+            catch (Exception ex)
+            {
+                this.loggingBroker.LogError(ex);
+                throw;
+            }
+        }
 
 
         public ValueTask<Hospital> ModifyHospitalAsync(Hospital hospital) =>
@@ -72,16 +102,32 @@ namespace MedMobile.Api.Services.Hospitals
                 return await storageBroker.DeleteHospitalAsync(maybeHospital);
             });
 
-        public IQueryable<Hospital> RetrieveAllHospitals() =>
-            TryCatch(() =>
-                 this.storageBroker.SelectAllHospitals());
+        public IQueryable<Hospital> RetrieveAllHospitals()
+        {
+            try
+            {
+                return this.storageBroker.SelectAllHospitals();
+            }
+            catch (Exception ex)
+            {
+                this.loggingBroker.LogError(ex);
+                throw;
+            }
+        }
 
-        public ValueTask<Hospital> RetrieveHospitalByIdAsync(Guid hospitalId) =>
-            TryCatch(async () =>
+        public async ValueTask<Hospital> RetrieveHospitalByIdAsync(Guid hospitalId)
+        {
+            try
             {
                 Hospital maybeHospital =
-                    await storageBroker.SelectHospitalByIdAsync(hospitalId);
+                   await storageBroker.SelectHospitalByIdAsync(hospitalId);
                 return maybeHospital;
-            });
+            }
+            catch (Exception ex)
+            {
+                this.loggingBroker.LogError(ex);
+                throw;
+            }
+        }
     }
 }

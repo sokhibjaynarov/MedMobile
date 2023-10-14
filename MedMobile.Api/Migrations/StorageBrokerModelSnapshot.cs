@@ -17,7 +17,7 @@ namespace MedMobile.Api.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("Identity")
+                .HasDefaultSchema("MedMobile")
                 .HasAnnotation("ProductVersion", "7.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -44,7 +44,7 @@ namespace MedMobile.Api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Doctors", "Identity");
+                    b.ToTable("Doctors", "MedMobile");
                 });
 
             modelBuilder.Entity("MedMobile.Api.Models.Doctors.DoctorField", b =>
@@ -67,7 +67,7 @@ namespace MedMobile.Api.Migrations
                     b.HasIndex("FieldId")
                         .IsUnique();
 
-                    b.ToTable("DoctorField", "Identity");
+                    b.ToTable("DoctorFields", "MedMobile");
                 });
 
             modelBuilder.Entity("MedMobile.Api.Models.Fields.Field", b =>
@@ -84,7 +84,7 @@ namespace MedMobile.Api.Migrations
 
                     b.HasKey("FieldId");
 
-                    b.ToTable("Fields", "Identity");
+                    b.ToTable("Fields", "MedMobile");
                 });
 
             modelBuilder.Entity("MedMobile.Api.Models.Hospitals.Hospital", b =>
@@ -102,7 +102,10 @@ namespace MedMobile.Api.Migrations
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Number")
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Website")
@@ -110,7 +113,7 @@ namespace MedMobile.Api.Migrations
 
                     b.HasKey("HospitalId");
 
-                    b.ToTable("Hospitals", "Identity");
+                    b.ToTable("Hospitals", "MedMobile");
                 });
 
             modelBuilder.Entity("MedMobile.Api.Models.Roles.Role", b =>
@@ -138,7 +141,7 @@ namespace MedMobile.Api.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("Role", "Identity");
+                    b.ToTable("Role", "MedMobile");
                 });
 
             modelBuilder.Entity("MedMobile.Api.Models.Sessions.Session", b =>
@@ -147,8 +150,11 @@ namespace MedMobile.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("RejectedBy")
+                    b.Property<Guid?>("CanceledBy")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ReasonOfCanceling")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -163,7 +169,7 @@ namespace MedMobile.Api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Sessions", "Identity");
+                    b.ToTable("Sessions", "MedMobile");
                 });
 
             modelBuilder.Entity("MedMobile.Api.Models.TimeLines.TimeLine", b =>
@@ -185,7 +191,7 @@ namespace MedMobile.Api.Migrations
 
                     b.HasIndex("DoctorUserId");
 
-                    b.ToTable("TimeLines", "Identity");
+                    b.ToTable("TimeLines", "MedMobile");
                 });
 
             modelBuilder.Entity("MedMobile.Api.Models.Users.User", b =>
@@ -263,7 +269,7 @@ namespace MedMobile.Api.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("User", "Identity");
+                    b.ToTable("User", "MedMobile");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -287,7 +293,7 @@ namespace MedMobile.Api.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RoleClaims", "Identity");
+                    b.ToTable("RoleClaims", "MedMobile");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -311,7 +317,7 @@ namespace MedMobile.Api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserClaims", "Identity");
+                    b.ToTable("UserClaims", "MedMobile");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
@@ -332,7 +338,7 @@ namespace MedMobile.Api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserLogins", "Identity");
+                    b.ToTable("UserLogins", "MedMobile");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
@@ -347,7 +353,7 @@ namespace MedMobile.Api.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UserRoles", "Identity");
+                    b.ToTable("UserRoles", "MedMobile");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -366,7 +372,7 @@ namespace MedMobile.Api.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("UserTokens", "Identity");
+                    b.ToTable("UserTokens", "MedMobile");
                 });
 
             modelBuilder.Entity("MedMobile.Api.Models.Doctors.Doctor", b =>

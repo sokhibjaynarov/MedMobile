@@ -4,12 +4,16 @@
 
 using MedMobile.Api.Brokers.Loggings;
 using MedMobile.Api.Brokers.StorageBrokers;
+using MedMobile.Api.Models.Sessions;
 using MedMobile.Api.Models.TimeLines;
+using MedMobile.Api.StaticFunctions;
 using MedMobile.Api.ViewModels.TimeLines;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace MedMobile.Api.Services.TimeLines
@@ -18,47 +22,35 @@ namespace MedMobile.Api.Services.TimeLines
     {
         private readonly ILoggingBroker loggingBroker;
         private readonly IStorageBroker storageBroker;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public TimeLineService(ILoggingBroker loggingBroker, IStorageBroker storageBroker)
+        public TimeLineService(
+            ILoggingBroker loggingBroker, 
+            IStorageBroker storageBroker,
+            IHttpContextAccessor httpContextAccessor)
         {
             this.loggingBroker = loggingBroker;
             this.storageBroker = storageBroker;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
-        private delegate ValueTask<TimeLine> ReturningTimeLineFunction();
-        private delegate IQueryable<TimeLine> ReturningTimeLinesFunction();
-
-        private async ValueTask<TimeLine> TryCatch(ReturningTimeLineFunction returningTimeLineFunction)
+        public async ValueTask<Guid> AddTimeLineAsync(TimeLineForCreateViewModel viewModel)
         {
             try
             {
-                return await returningTimeLineFunction();
-            }
-            catch (Exception ex)
-            {
-                throw new NotImplementedException();
-            }
-        }
+                string doctorUserId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        private IQueryable<TimeLine> TryCatch(ReturningTimeLinesFunction returningTimeLinesFunction)
-        {
-            try
-            {
-                return returningTimeLinesFunction();
-            }
-            catch (SqlException sqlException)
-            {
-                throw new NotImplementedException();
-            }
-        }
+                bool isTimeLineExists = storageBroker.SelectAllTimeLines()
+                    .Any(t => t.StartDateTime == t.StartDateTime && t.DoctorUserId.ToString() == doctorUserId);
 
-        public ValueTask<TimeLine> AddTimeLineAsync(TimeLineForCreateViewModel viewModel)
-        {
-            try
-            {
-                if (viewModel.DoctorUserId == Guid.Empty)
+                if (isTimeLineExists)
                 {
-                    throw new Exception();
+                    throw new Exception(ResponseMessages.ERROR_EXIST_DATA);
+                }
+
+                if (viewModel.DoctorUserId == Guid.Empty || viewModel.StartDateTime < DateTime.UtcNow)
+                {
+                    throw new Exception(ResponseMessages.ERROR_INVALID_DATA);
                 }
 
                 TimeLine timeLine = new TimeLine
@@ -68,7 +60,8 @@ namespace MedMobile.Api.Services.TimeLines
                     EndDateTime = viewModel.EndDateTime ?? viewModel.StartDateTime.AddMinutes(30)
                 };
 
-                return storageBroker.InsertTimeLineAsync(timeLine);
+                TimeLine createdTimeLine = await storageBroker.InsertTimeLineAsync(timeLine);
+                return createdTimeLine.TimeLineId;
             }
             catch (Exception ex)
             {
@@ -77,35 +70,83 @@ namespace MedMobile.Api.Services.TimeLines
             }
         }
 
-
-        public ValueTask<TimeLine> ModifyTimeLineAsync(TimeLine timeLine) =>
-            TryCatch(async () =>
+        public async ValueTask<bool> RemoveTimeLineByIdAsync(TimeLineForRemoveViewModel viewModel)
+        {
+            try
             {
-                TimeLine maybeTimeLine =
-                    await this.storageBroker.SelectTimeLineByIdAsync(timeLine.TimeLineId);
-                return await storageBroker.UpdateTimeLineAsync(timeLine);
-            });
+                string doctorUserId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(doctorUserId))
+                {
+                    throw new Exception(ResponseMessages.ERROR_INVALID_DATA);
+                }
 
+                if (string.IsNullOrEmpty(viewModel.ReasonOfCanceling))
+                {
+                    throw new Exception(ResponseMessages.ERROR_INVALID_DATA);
+                }
 
-        public ValueTask<TimeLine> RemoveTimeLineByIdAsync(Guid timeLineId) =>
-            TryCatch(async () =>
+                TimeLine timeLine = await storageBroker.SelectTimeLineByIdAsync(viewModel.TimeLineId);
+                if (timeLine == null)
+                {
+                    throw new Exception(ResponseMessages.ERROR_NOT_FOUND_DATA);
+                }
+
+                if (timeLine.DoctorUserId.ToString() != doctorUserId)
+                {
+                    throw new Exception(ResponseMessages.ERROR_NOT_ALLOWED_DATA);
+                }
+
+                Session session = await storageBroker.SelectAllSessions()
+                    .Where(s => s.TimeLineId == timeLine.TimeLineId).FirstOrDefaultAsync();
+
+                if (session != null)
+                {
+                    session.CanceledBy = Guid.Parse(doctorUserId);
+                    session.Status = Status.Canceled;
+                    session.ReasonOfCanceling = viewModel.ReasonOfCanceling;
+                }
+
+                await storageBroker.DeleteTimeLineAsync(timeLine);
+                return true;
+            }
+            catch (Exception ex)
             {
-                TimeLine maybeTimeLine =
-                await this.storageBroker.SelectTimeLineByIdAsync(timeLineId);
+                loggingBroker.LogError(ex);
+                throw;
+            }
+        }
 
-                return await storageBroker.DeleteTimeLineAsync(maybeTimeLine);
-            });
-
-        public IQueryable<TimeLine> RetrieveAllTimeLines() =>
-            TryCatch(() =>
-                 this.storageBroker.SelectAllTimeLines());
-
-        public ValueTask<TimeLine> RetrieveTimeLineByIdAsync(Guid timeLineId) =>
-            TryCatch(async () =>
+        public async Task<IEnumerable<TimeLineForGetViewModel>> RetrieveDoctorTimeLinesAsync(Guid doctorUserId, DateTime? fromDateTime, DateTime? toDateTime)
+        {
+            try
             {
-                TimeLine maybeTimeLine =
-                    await storageBroker.SelectTimeLineByIdAsync(timeLineId);
-                return maybeTimeLine;
-            });
+                IQueryable<TimeLine> timeLineQuery = storageBroker.SelectAllTimeLines().Where(a => a.DoctorUserId == doctorUserId);
+
+                if (fromDateTime != null)
+                {
+                    timeLineQuery = timeLineQuery.Where(a => a.StartDateTime >= fromDateTime);
+                }
+                if (toDateTime != null)
+                {
+                    timeLineQuery = timeLineQuery.Where(a => a.EndDateTime <= toDateTime);
+                }
+
+                var timeLines = await timeLineQuery.Select(a => new TimeLineForGetViewModel
+                {
+                    TimeLineId = a.TimeLineId,
+                    StartDateTime = a.StartDateTime,
+                    EndDateTime = a.EndDateTime,
+                    IsBooked = storageBroker.SelectAllSessions()
+                                .Any(s => s.TimeLineId == a.TimeLineId && (s.Status == Status.Waiting || s.Status == Status.Completed))
+                }).ToListAsync();
+
+                return timeLines;
+            }
+            catch (Exception ex)
+            {
+                loggingBroker.LogError(ex);
+                throw;
+            }
+        }
     }
 }

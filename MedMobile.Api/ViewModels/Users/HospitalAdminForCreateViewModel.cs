@@ -2,12 +2,11 @@
 // Copyright (c) DevZilla team
 // ---------------------------------------------------------------
 
-namespace MedMobile.Api.Models.Sessions
+namespace MedMobile.Api.ViewModels.Users
 {
-    public enum Status
+    public class HospitalAdminForCreateViewModel
     {
-        Waiting,
-        Canceled,
-        Completed
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }

@@ -58,7 +58,7 @@ namespace MedMobile.Api.Services.Doctors
         {
             try
             {
-                if (viewModel.HospitalId == Guid.Empty || viewModel.UserId == Guid.Empty)
+                if (viewModel.HospitalId == Guid.Empty)
                 {
                     throw new Exception();
                 }
@@ -66,7 +66,6 @@ namespace MedMobile.Api.Services.Doctors
                 Doctor doctor = new Doctor
                 {
                     HospitalId = viewModel.HospitalId,
-                    UserId = viewModel.UserId,
                     Description = viewModel.Description
                 };
 
@@ -115,16 +114,32 @@ namespace MedMobile.Api.Services.Doctors
             }
         }
 
-        public IQueryable<Doctor> RetrieveAllDoctors() =>
-            TryCatch(() =>
-                 this.storageBroker.SelectAllDoctors());
+        public IQueryable<Doctor> RetrieveAllDoctors()
+        {
+            try
+            {
+                return this.storageBroker.SelectAllDoctors();
+            }
+            catch (Exception ex)
+            {
+                this.loggingBroker.LogError(ex);
+                throw;
+            }
+        }
 
-        public ValueTask<Doctor> RetrieveDoctorByIdAsync(Guid doctorId) =>
-            TryCatch(async () =>
+        public async ValueTask<Doctor> RetrieveDoctorByIdAsync(Guid doctorId)
+        {
+            try
             {
                 Doctor maybeDoctor =
-                    await storageBroker.SelectDoctorByIdAsync(doctorId);
+                    await this.storageBroker.SelectDoctorByIdAsync(doctorId);
                 return maybeDoctor;
-            });
+            }
+            catch (Exception ex)
+            {
+                this.loggingBroker.LogError(ex);
+                throw;
+            }
+        }
     }
 }
