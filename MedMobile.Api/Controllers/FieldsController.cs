@@ -19,11 +19,11 @@ namespace MedMobile.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ValueTask<PaginationResponse>> GetFields(string searchText, int skip = 0, int take = 20)
+        public async Task<ActionResult<PaginationResponse>> GetFields(string searchText, int skip = 0, int take = 20)
         {
             try
             {
-                var result = this.fieldService.GetAllFields();
+                var result = this.fieldService.GetAllFieldsAsync(searchText, skip, take);
                 return Ok(result);
             }
             catch (Exception ex)
