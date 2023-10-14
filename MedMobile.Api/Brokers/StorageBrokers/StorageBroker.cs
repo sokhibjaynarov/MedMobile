@@ -2,7 +2,6 @@
 // Copyright (c) DevZilla team
 // ---------------------------------------------------------------
 
-using MedMobile.Api.Brokers.StorageBrokers;
 using MedMobile.Api.Models.Roles;
 using MedMobile.Api.Models.Users;
 using Microsoft.AspNetCore.Identity;
@@ -11,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Threading.Tasks;
 
 namespace MedMobile.Api.Brokers.StorageBrokers

@@ -2,30 +2,20 @@
 // Copyright (c) DevZilla team
 // ---------------------------------------------------------------
 
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace MedMobile.Api.Models.Persons
+namespace MedMobile.Api.ViewModels.Users
 {
-    public class Person
+    public class RegisterPatientViewModel
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid PersonId { get; set; }
-
         public string FirstName { get; set; }
-
         public string LastName { get; set; }
-
         public string FatherName { get; set; }
-
-        public string PasportNumber { get; set; }
-
-        public string Number { get; set; }
-
+        public string PassportNumber { get; set; }
         public string Email { get; set; }
-
-
-        public virtual User Users { get; set; }
+        //[RegularExpression(@"^998[389][012345789][0-9]{7}$", ErrorMessage = "Phone number is not valid")]
+        public string PhoneNumber { get; set; }
+        public string Description { get; set; }
+        public string Password { get; set; }
     }
 }
