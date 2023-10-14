@@ -1,4 +1,8 @@
-﻿using MedMobile.Api.Brokers.StorageBrokers;
+﻿// --------------------------------------------------------------- 
+// Copyright (c) DevZilla team
+// ---------------------------------------------------------------
+
+using MedMobile.Api.Brokers.StorageBrokers;
 using MedMobile.Api.Models.Doctors;
 using MedMobile.Api.Models.Fields;
 using MedMobile.Api.Models.Hospitals;
@@ -14,20 +18,23 @@ namespace MedMobile.Api.Data
 {
     public static class SeedData
     {
-        private static Guid SuperAdminId = Guid.Parse("0acgab29-8841-4dce-a579-5f226ad42340");
+        private static Guid SuperAdminId = Guid.Parse("0acfab29-8841-4dce-a579-5f226ad42340");
 
-        private static Guid GovernmentHospitalId = Guid.Parse("0acfab29-8841-4dce-a579-5f226ad42340");
-        private static Guid PrivateHospitalId = Guid.Parse("1bcfab29-8841-4dce-a579-5f226ad42340");
+        private static Guid GovernmentHospitalId = Guid.Parse("cb2df5ab-a35d-469b-be52-4233318bec41");
+        private static Guid PrivateHospitalId = Guid.Parse("7f523afc-e76f-427e-b43b-d048cc361e72");
 
-        private static Guid GovernmentHospitalAdminId = Guid.Parse("1bcfab29-1234-4dce-a579-5f226ad42340");
-        private static Guid PrivateHospitalAdminId = Guid.Parse("1bcfab29-2323-4dce-a579-5f226ad42340");
+        private static Guid GovernmentHospitalAdminId = Guid.Parse("bfa09273-83df-4140-96ce-800c3b8b92ad");
+        private static Guid PrivateHospitalAdminId = Guid.Parse("7f93554e-d58b-4f79-b389-d23751a814d6");
 
-        private static Guid AllergistFieldId = Guid.Parse("1bcfab29-8841-4dce-a579-5f226ad42240");
-        private static Guid AnesthesiologistFieldId = Guid.Parse("1bcfab29-8841-4dce-a779-5f226ad42340");
-        private static Guid CardiologistFieldId = Guid.Parse("1bcfab29-8841-4dce-a279-5f226ad42340");
+        private static Guid AllergistFieldId = Guid.Parse("c927c079-1e8f-4380-b353-8eff463ff1f7");
+        private static Guid AnesthesiologistFieldId = Guid.Parse("37589215-9bfd-4d31-bc6c-9055e874fe2d");
+        private static Guid CardiologistFieldId = Guid.Parse("f445e062-6d2d-4795-bd50-964c6bdc383a");
 
-        private static Guid DoctorAllergistId = Guid.Parse("1bcfab30-8841-4dce-a279-5f226ad42340");
-        private static Guid DoctorCardiologistId = Guid.Parse("0aafab30-8841-4dce-a279-5f226ad42340");
+        private static Guid DoctorAllergistId = Guid.Parse("3d4213c3-52bb-42a8-bc32-815d68ad91db");
+        private static Guid DoctorCardiologistId = Guid.Parse("b887c208-bdad-4ca4-aa32-11338395fef2");
+
+        private static Guid DoctorAllergistUserId = Guid.Parse("d6f07052-285f-4a03-9650-3728a312f265");
+        private static Guid DoctorCardiologistUserId = Guid.Parse("79fd5583-f37c-4033-8418-f1d0717f6775");
 
         public static async Task SeedRolesAsync(UserManager<User> userManager, RoleManager<Role> roleManager)
         {
@@ -55,7 +62,7 @@ namespace MedMobile.Api.Data
                 var user = await userManager.FindByEmailAsync(superAdmin.Email);
                 if (user == null)
                 {
-                    await userManager.CreateAsync(superAdmin, "123");
+                    await userManager.CreateAsync(superAdmin, "@Admin123");
                     await userManager.AddToRoleAsync(superAdmin, Roles.SuperAdmin.ToString());
                 }
             }
@@ -84,7 +91,7 @@ namespace MedMobile.Api.Data
                 var user = await userManager.FindByEmailAsync(govermentHospitalAdmin.Email);
                 if (user == null)
                 {
-                    await userManager.CreateAsync(govermentHospitalAdmin, "123");
+                    await userManager.CreateAsync(govermentHospitalAdmin, "@Admin123");
                     await userManager.AddToRoleAsync(govermentHospitalAdmin, Roles.Admin.ToString());
                 }
             }
@@ -94,7 +101,7 @@ namespace MedMobile.Api.Data
                 var user = await userManager.FindByEmailAsync(privateHospitalAdmin.Email);
                 if (user == null)
                 {
-                    await userManager.CreateAsync(privateHospitalAdmin, "123");
+                    await userManager.CreateAsync(privateHospitalAdmin, "@Admin123");
                     await userManager.AddToRoleAsync(privateHospitalAdmin, Roles.Admin.ToString());
                 }
             }
@@ -180,6 +187,7 @@ namespace MedMobile.Api.Data
         {
             var govermentHospitalUserDoctorAllergist = new User()
             {
+                Id = DoctorAllergistUserId,
                 UserName = "allergist@gov.uz",
                 Email = "allergist@gov.uz",
                 EmailConfirmed = true,
@@ -187,7 +195,7 @@ namespace MedMobile.Api.Data
                 FirstName = "Sohib",
                 LastName = "Jaynarov",
                 FatherName = "Alisher",
-                PassportNumber = "AA123131",
+                PassportNumber = "AA@Admin123131",
                 PhoneNumber = "+998995822929"
             };
 
@@ -195,7 +203,7 @@ namespace MedMobile.Api.Data
             {
                 DoctorId = DoctorAllergistId,
                 HospitalId = GovernmentHospitalId,
-                UserId = govermentHospitalUserDoctorAllergist.Id,
+                UserId = DoctorAllergistUserId,
                 Description = "12 years ultra pro max Allergist"
             };
 
@@ -204,7 +212,7 @@ namespace MedMobile.Api.Data
                 var user = await userManager.FindByEmailAsync(govermentHospitalUserDoctorAllergist.Email);
                 if (user == null)
                 {
-                    await userManager.CreateAsync(govermentHospitalUserDoctorAllergist, "123");
+                    await userManager.CreateAsync(govermentHospitalUserDoctorAllergist, "@Admin123");
                     await userManager.AddToRoleAsync(govermentHospitalUserDoctorAllergist, Roles.Doctor.ToString());
                 }
             }
@@ -216,6 +224,7 @@ namespace MedMobile.Api.Data
 
             var privateHospitalUserDoctorCardiologist = new User()
             {
+                Id = DoctorCardiologistUserId,
                 UserName = "privateadmin@gmail.com",
                 Email = "privateadmin@gmail.com",
                 EmailConfirmed = true,
@@ -223,7 +232,7 @@ namespace MedMobile.Api.Data
                 FirstName = "Sardor",
                 LastName = "To'ymurodov",
                 FatherName = "Alisher",
-                PassportNumber = "AA123137",
+                PassportNumber = "AA@Admin123137",
                 PhoneNumber = "+998995822929"
             };
 
@@ -231,7 +240,7 @@ namespace MedMobile.Api.Data
             {
                 DoctorId = DoctorCardiologistId,
                 HospitalId = PrivateHospitalId,
-                UserId = privateHospitalUserDoctorCardiologist.Id,
+                UserId = DoctorCardiologistUserId,
                 Description = "12 years ultra pro max Allergist"
             };
 
@@ -240,7 +249,7 @@ namespace MedMobile.Api.Data
                 var user = await userManager.FindByEmailAsync(privateHospitalUserDoctorCardiologist.Email);
                 if (user == null)
                 {
-                    await userManager.CreateAsync(privateHospitalUserDoctorCardiologist, "123");
+                    await userManager.CreateAsync(privateHospitalUserDoctorCardiologist, "@Admin123");
                     await userManager.AddToRoleAsync(privateHospitalUserDoctorCardiologist, Roles.Doctor.ToString());
                 }
             }
