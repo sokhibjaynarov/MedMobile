@@ -52,12 +52,12 @@ namespace MedMobile.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TimeLineForGetViewModel>>> RetrieveDoctorTimeLines(
+        public async Task<ActionResult<IEnumerable<TimeLineForGetViewModel>>> GetDoctorTimeLines(
             Guid doctorUserId, DateTime? fromDateTime, DateTime? toDateTime)
         {
             try
             {
-                var timeLines = await timeLineService.RetrieveDoctorTimeLinesAsync(doctorUserId, fromDateTime, toDateTime);
+                var timeLines = await timeLineService.GetDoctorTimeLinesAsync(doctorUserId, fromDateTime, toDateTime);
                 return Ok(timeLines);
             }
             catch (Exception ex)

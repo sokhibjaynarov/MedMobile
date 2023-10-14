@@ -6,6 +6,7 @@ using MedMobile.Api.Brokers.Loggings;
 using MedMobile.Api.Brokers.UserManagement;
 using MedMobile.Api.Models.Users;
 using MedMobile.Api.ViewModels.Identity;
+using MedMobile.Api.ViewModels.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -78,6 +79,14 @@ namespace MedMobile.Api.Services.Identity
 
                 response.ExpirationData = token.ValidTo;
                 response.Token = new JwtSecurityTokenHandler().WriteToken(token);
+                response.User = new UserForLoginResponseViewModel()
+                {
+                    FatherName = user.FatherName,
+                    LastName = user.LastName,
+                    FirstName = user.FirstName,
+                    PassportNumber = user.PassportNumber,
+                    UserId = user.Id
+                };
 
                 return response;
             }

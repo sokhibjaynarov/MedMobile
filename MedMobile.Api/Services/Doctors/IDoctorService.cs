@@ -13,8 +13,8 @@ namespace MedMobile.Api.Services.Doctors
     public interface IDoctorService
     {
         ValueTask<Doctor> AddDoctorAsync(DoctorForCreateViewModel viewModel);
-        IQueryable<Doctor> RetrieveAllDoctors();
-        ValueTask<Doctor> RetrieveDoctorByIdAsync(Guid doctorId);
+        IQueryable<Doctor> GetAllDoctors();
+        ValueTask<Doctor> GetDoctorByIdAsync(Guid doctorId);
         ValueTask<Doctor> ModifyDoctorAsync(DoctorForUpdateViewModel viewModel);
         ValueTask<Doctor> RemoveDoctorByIdAsync(Guid doctorId);
     }
