@@ -46,10 +46,11 @@ namespace MedMobile.Api.Services.Users
                     FatherName = viewModel.FatherName,
                     PassportNumber = viewModel.PassportNumber,
                     PhoneNumber = viewModel.PhoneNumber,
-                    Email = viewModel.Email
+                    Email = viewModel.Email,
+                    UserName = viewModel.Email.ToLower()
                 };
 
-                User newUser = await this.userManagementBroker.InsertUserAsync(user, viewModel.PassportNumber);
+                User newUser = await this.userManagementBroker.InsertUserAsync(user, viewModel.Password);
 
                 return newUser.Id;
             }
