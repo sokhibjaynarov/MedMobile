@@ -2,9 +2,12 @@
 // Copyright (c) DevZilla team
 // ---------------------------------------------------------------
 
+using MedMobile.Api.Brokers.Loggings;
 using MedMobile.Api.Brokers.StorageBrokers;
 using MedMobile.Api.Models.TimeLines;
+using MedMobile.Api.ViewModels.TimeLines;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,10 +16,12 @@ namespace MedMobile.Api.Services.TimeLines
 {
     public class TimeLineService : ITimeLineService
     {
+        private readonly ILoggingBroker loggingBroker;
         private readonly IStorageBroker storageBroker;
 
-        public TimeLineService(IStorageBroker storageBroker)
+        public TimeLineService(ILoggingBroker loggingBroker, IStorageBroker storageBroker)
         {
+            this.loggingBroker = loggingBroker;
             this.storageBroker = storageBroker;
         }
 
@@ -47,11 +52,30 @@ namespace MedMobile.Api.Services.TimeLines
             }
         }
 
-        public ValueTask<TimeLine> AddTimeLineAsync(TimeLine timeLine) =>
-        TryCatch(async () =>
+        public ValueTask<TimeLine> AddTimeLineAsync(TimeLineForCreateViewModel viewModel)
         {
-            return await this.storageBroker.InsertTimeLineAsync(timeLine);
-        });
+            try
+            {
+                if (viewModel.DoctorUserId == Guid.Empty)
+                {
+                    throw new Exception();
+                }
+
+                TimeLine timeLine = new TimeLine
+                {
+                    DoctorUserId = viewModel.DoctorUserId,
+                    StartDateTime = viewModel.StartDateTime,
+                    EndDateTime = viewModel.EndDateTime ?? viewModel.StartDateTime.AddMinutes(30)
+                };
+
+                return storageBroker.InsertTimeLineAsync(timeLine);
+            }
+            catch (Exception ex)
+            {
+                loggingBroker.LogError(ex);
+                throw;
+            }
+        }
 
 
         public ValueTask<TimeLine> ModifyTimeLineAsync(TimeLine timeLine) =>
