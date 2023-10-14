@@ -22,6 +22,6 @@ namespace MedMobile.Api.Models.TimeLines
         public DateTime EndDateTime { get; set; }
 
 
-        public virtual User User { get; set; }
+        public virtual User DoctorUser { get; set; }
     }
 }

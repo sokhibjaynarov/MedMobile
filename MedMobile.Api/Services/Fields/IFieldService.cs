@@ -12,8 +12,8 @@ namespace MedMobile.Api.Services.Fields
     public interface IFieldService
     {
         ValueTask<Field> AddFieldAsync(Field field);
-        IQueryable<Field> RetrieveAllFields();
-        ValueTask<Field> RetrieveFieldByIdAsync(Guid fieldId);
+        IQueryable<Field> GetAllFields();
+        ValueTask<Field> GetFieldByIdAsync(Guid fieldId);
         ValueTask<Field> ModifyFieldAsync(Field field);
         ValueTask<Field> RemoveFieldByIdAsync(Guid fieldId);
     }

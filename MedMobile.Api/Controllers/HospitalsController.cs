@@ -47,7 +47,7 @@ namespace MedMobile.Api.Controllers
         {
             try
             {
-                var hospitals = this.hospitalService.RetrieveAllHospitals();
+                var hospitals = this.hospitalService.GetAllHospitals();
                 return Ok(hospitals);
             }
             catch (Exception ex)
@@ -57,11 +57,11 @@ namespace MedMobile.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<Hospital>> GetHospitalById(Guid doctorId)
+        public async Task<ActionResult<Hospital>> GetHospitalById(Guid hospitalId)
         {
             try
             {
-                var hospital = this.hospitalService.RetrieveHospitalByIdAsync(doctorId);
+                var hospital = this.hospitalService.GetHospitalByIdAsync(hospitalId);
                 return Ok(hospital);
             }
             catch (Exception ex)

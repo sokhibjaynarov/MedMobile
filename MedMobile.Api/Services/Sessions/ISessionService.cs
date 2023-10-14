@@ -3,10 +3,11 @@
 // ---------------------------------------------------------------
 
 using MedMobile.Api.Models.Sessions;
-using System.Linq;
 using System.Threading.Tasks;
 using System;
 using MedMobile.Api.ViewModels.Sessions;
+using System.Collections.Generic;
+using MedMobile.Api.ViewModels.Pagination;
 
 namespace MedMobile.Api.Services.Sessions
 {
@@ -14,7 +15,7 @@ namespace MedMobile.Api.Services.Sessions
     {
         ValueTask<Guid> AddSessionAsync(SessionForCreateViewModel session);
         ValueTask<bool> CancelSessionAsync(SessionForCancelViewModel viewModel);
-        IQueryable<Session> RetrieveAllSessions();
-        ValueTask<SessionForGetViewModel> RetrieveSessionByIdAsync(Guid sessionId);
+        Task<PaginationResponse> GetAllSessionsAsync(List<Guid> doctorIds, List<Guid> userIds, List<Status> statuses, int skip, int take);
+        ValueTask<SessionForGetViewModel> GetSessionByIdAsync(Guid sessionId);
     }
 }

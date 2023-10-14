@@ -1,0 +1,18 @@
+/* Preview card */
+.item-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  .item-list__item {
+    display: flex;
+    align-items: center;
+    column-gap: 6px;
+    &:not(:last-child) {
+      margin-bottom: 6px;
+    }
+    span:first-of-type {
+      font-size: 1.05rem;
+      font-weight: 500;
+    }
+  }
+}
