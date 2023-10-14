@@ -2,12 +2,12 @@
 // Copyright (c) DevZilla team
 // ---------------------------------------------------------------
 
-namespace MedMobile.Api.Models.Sessions
+using System;
+
+namespace MedMobile.Api.ViewModels.Sessions
 {
-    public enum Status
+    public class SessionForCreateViewModel
     {
-        Waiting,
-        Canceled,
-        Completed
+        public Guid TimeLineId { get; set; }
     }
 }

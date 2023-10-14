@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// --------------------------------------------------------------- 
+// Copyright (c) DevZilla team
+// ---------------------------------------------------------------
+
+using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 using System.Threading.Tasks;
 using System;
