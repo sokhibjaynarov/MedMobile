@@ -198,6 +198,12 @@ namespace MedMobile.Api.Migrations
                     b.Property<DateTime>("StartDateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("TimeLineId");
 
                     b.HasIndex("UserId");
@@ -445,13 +451,9 @@ namespace MedMobile.Api.Migrations
 
             modelBuilder.Entity("MedMobile.Api.Models.TimeLines.TimeLine", b =>
                 {
-                    b.HasOne("MedMobile.Api.Models.Users.User", "User")
+                    b.HasOne("MedMobile.Api.Models.Users.User", null)
                         .WithMany("TimeLines")
-                        .HasForeignKey("DoctorUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
