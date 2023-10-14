@@ -225,14 +225,14 @@ namespace MedMobile.Api.Data
             var privateHospitalUserDoctorCardiologist = new User()
             {
                 Id = DoctorCardiologistUserId,
-                UserName = "privateadmin@gmail.com",
-                Email = "privateadmin@gmail.com",
+                UserName = "cardiologist@gmail.com",
+                Email = "cardiologist@gmail.com",
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
                 FirstName = "Sardor",
                 LastName = "To'ymurodov",
                 FatherName = "Alisher",
-                PassportNumber = "AA@Admin123137",
+                PassportNumber = "AA1231212",
                 PhoneNumber = "+998995822929"
             };
 
