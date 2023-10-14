@@ -14,14 +14,20 @@ namespace MedMobile.Api.Models.TimeLines
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid TimeLineId { get; set; }
 
-        [ForeignKey(nameof(User))]
+        //[ForeignKey(nameof(User))]
         public Guid DoctorUserId { get; set; }
+
+        public string Title { get; set; }
+
+        public string Description { get; set; }
+
+        public string EventUrl { get; set; }
 
         public DateTime StartDateTime { get; set; }
 
         public DateTime EndDateTime { get; set; }
 
 
-        public virtual User DoctorUser { get; set; }
+        //public virtual User DoctorUser { get; set; }
     }
 }

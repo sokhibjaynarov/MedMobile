@@ -81,11 +81,11 @@ namespace MedMobile.Api.Services.Users
 
                 var admin = new User()
                 {
-                    Email = viewModel.Admin.Email,
-                    UserName = viewModel.Admin.Email.ToLower()
+                    Email = viewModel.AdminEmail,
+                    UserName = viewModel.AdminEmail.ToLower()
                 };
 
-                User newUser = await this.userManagementBroker.InsertUserAsync(admin, viewModel.Admin.Password);
+                User newUser = await this.userManagementBroker.InsertUserAsync(admin, viewModel.Password);
                 var roles = new List<string>() { "Admin" };
                 await this.userManagementBroker.AddToRolesAsync(newUser, roles);
 

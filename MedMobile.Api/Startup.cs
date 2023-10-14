@@ -7,6 +7,7 @@ using MedMobile.Api.Brokers.RoleManagement;
 using MedMobile.Api.Brokers.StorageBrokers;
 using MedMobile.Api.Brokers.UserManagement;
 using MedMobile.Api.Configurations;
+using MedMobile.Api.Hubs;
 using MedMobile.Api.Models.Roles;
 using MedMobile.Api.Models.Users;
 using MedMobile.Api.Services.Doctors;
@@ -79,6 +80,13 @@ namespace MedMobile.Api
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
                 };
             });
+
+            services.AddSignalR(options =>
+            {
+                options.EnableDetailedErrors = true;
+                options.MaximumReceiveMessageSize = 9223372036854775807;
+            })
+            .AddMessagePackProtocol();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
@@ -104,6 +112,7 @@ namespace MedMobile.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<MessengerHub>("/hubs/messenger");
             });
         }
 

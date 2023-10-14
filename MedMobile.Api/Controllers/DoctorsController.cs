@@ -1,6 +1,4 @@
 ﻿using MedMobile.Api.Services.Doctors;
-using MedMobile.Api.ViewModels.Users;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 using System.Threading.Tasks;
