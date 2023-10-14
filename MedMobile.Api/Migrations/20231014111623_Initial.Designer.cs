@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedMobile.Api.Migrations
 {
     [DbContext(typeof(StorageBroker))]
-    [Migration("20231014072521_Initial")]
+    [Migration("20231014111623_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -153,8 +153,11 @@ namespace MedMobile.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("RejectedBy")
+                    b.Property<Guid?>("CanceledBy")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ReasonOfCanceling")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");

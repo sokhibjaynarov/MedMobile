@@ -151,7 +151,8 @@ namespace MedMobile.Api.Migrations
                     SessionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TimeLineId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RejectedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CanceledBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ReasonOfCanceling = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
