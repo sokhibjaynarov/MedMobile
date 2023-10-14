@@ -19,6 +19,7 @@ namespace MedMobile.Api.ViewModels.Hospitals
 
         public string Website { get; set; }
 
-        public HospitalAdminForCreateViewModel Admin { get; set; }
+        public string AdminEmail { get; set; }
+        public string Password { get; set; }
     }
 }
