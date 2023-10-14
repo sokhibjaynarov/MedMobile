@@ -23,6 +23,8 @@ namespace MedMobile.Api.Models.Sessions
 
         public Guid? RejectedBy { get; set; }
 
+        public string ReasonOfRejection { get; set; }
+
         public Status Status { get; set; } = Status.Waiting;
 
 
