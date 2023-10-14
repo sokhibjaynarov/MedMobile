@@ -3,7 +3,6 @@ import { lazy } from "react";
 import { Navigate } from "react-router-dom";
 
 const Chat = lazy(() => import("../../views/apps/chat"));
-const Todo = lazy(() => import("../../views/apps/todo"));
 const Email = lazy(() => import("../../views/apps/email"));
 const Kanban = lazy(() => import("../../views/apps/kanban"));
 const Calendar = lazy(() => import("../../views/apps/calendar"));
@@ -63,17 +62,9 @@ const EcommerceDetail = lazy(() => import("../../views/apps/ecommerce/detail"));
 const EcommerceWishlist = lazy(() =>
   import("../../views/apps/ecommerce/wishlist")
 );
-const EcommerceCheckout = lazy(() =>
-  import("../../views/apps/ecommerce/checkout")
-);
 
 const UserList = lazy(() => import("../../views/apps/user/list"));
 const UserView = lazy(() => import("../../views/apps/user/view"));
-
-const Roles = lazy(() => import("../../views/apps/roles-permissions/roles"));
-const Permissions = lazy(() =>
-  import("../../views/apps/roles-permissions/permissions")
-);
 
 const AppRoutes = [
   {
@@ -85,55 +76,11 @@ const AppRoutes = [
     },
   },
   {
-    element: <Email />,
-    path: "/apps/email/:folder",
-    meta: {
-      appLayout: true,
-      className: "email-application",
-    },
-  },
-  {
-    element: <Email />,
-    path: "/apps/email/label/:label",
-    meta: {
-      appLayout: true,
-      className: "email-application",
-    },
-  },
-  {
-    element: <Email />,
-    path: "/apps/email/:filter",
-  },
-  {
     path: "/apps/chat",
     element: <Chat />,
     meta: {
       appLayout: true,
       className: "chat-application",
-    },
-  },
-  {
-    element: <Todo />,
-    path: "/apps/todo",
-    meta: {
-      appLayout: true,
-      className: "todo-application",
-    },
-  },
-  {
-    element: <Todo />,
-    path: "/apps/todo/:filter",
-    meta: {
-      appLayout: true,
-      className: "todo-application",
-    },
-  },
-  {
-    element: <Todo />,
-    path: "/apps/todo/tag/:tag",
-    meta: {
-      appLayout: true,
-      className: "todo-application",
     },
   },
   {
@@ -373,13 +320,6 @@ const AppRoutes = [
     },
   },
   {
-    path: "/apps/ecommerce/checkout",
-    element: <EcommerceCheckout />,
-    meta: {
-      className: "ecommerce-application",
-    },
-  },
-  {
     element: <UserList />,
     path: "/apps/user/list",
   },
@@ -390,14 +330,6 @@ const AppRoutes = [
   {
     element: <UserView />,
     path: "/apps/user/view/:id",
-  },
-  {
-    element: <Roles />,
-    path: "/apps/roles",
-  },
-  {
-    element: <Permissions />,
-    path: "/apps/permissions",
   },
 ];
 export default AppRoutes;

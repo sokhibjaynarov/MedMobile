@@ -26,7 +26,7 @@ namespace MedMobile.Api.Models.Hospitals
         public string Email { get; set; }
 
         public string Website { get; set; }
-
+        public Guid AdminUserId { get; set; }
 
         public virtual List<Doctor> Doctors { get; set; }
     }
