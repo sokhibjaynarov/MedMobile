@@ -75,7 +75,7 @@ namespace MedMobile.Api.Brokers.StorageBrokers
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.HasDefaultSchema("Identity");
+            builder.HasDefaultSchema("MedMobile");
             builder.Entity<User>(entity =>
             {
                 entity.ToTable(name: "User");

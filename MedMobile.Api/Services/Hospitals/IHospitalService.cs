@@ -6,12 +6,13 @@ using MedMobile.Api.Models.Hospitals;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using MedMobile.Api.ViewModels.Hospitals;
 
 namespace MedMobile.Api.Services.Hospitals
 {
     public interface IHospitalService
     {
-        ValueTask<Hospital> AddHospitalAsync(Hospital hospital);
+        ValueTask<Guid> AddHospitalAsync(HospitalForCreateViewModel viewModel);
         IQueryable<Hospital> RetrieveAllHospitals();
         ValueTask<Hospital> RetrieveHospitalByIdAsync(Guid hospitalId);
         ValueTask<Hospital> ModifyHospitalAsync(Hospital hospital);
