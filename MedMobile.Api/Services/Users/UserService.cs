@@ -118,6 +118,15 @@ namespace MedMobile.Api.Services.Users
                     throw new Exception();
                 }
 
+                User existUser = await this.userManagementBroker.SelectAllUsers()
+                    .FirstOrDefaultAsync(user => user.Email.ToLower() == viewModel.Email.ToLower() ||
+                    user.PhoneNumber == viewModel.PhoneNumber);
+
+                if (existUser != null)
+                {
+                    throw new Exception();
+                }
+
                 var user = new User()
                 {
                     FirstName = viewModel.FirstName,

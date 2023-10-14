@@ -8,6 +8,8 @@ using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using MedMobile.Api.Services.Hospitals;
 using MedMobile.Api.ViewModels.Hospitals;
+using MedMobile.Api.Models.Doctors;
+using MedMobile.Api.Models.Hospitals;
 
 namespace MedMobile.Api.Controllers
 {
@@ -33,6 +35,34 @@ namespace MedMobile.Api.Controllers
 
                 await this.userService.AddHospitalAdminAsync(viewModel);
                 return Ok(userId);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult<Hospital> GetAllHospitals()
+        {
+            try
+            {
+                var hospitals = this.hospitalService.RetrieveAllHospitals();
+                return Ok(hospitals);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<Hospital>> GetHospitalById(Guid doctorId)
+        {
+            try
+            {
+                var hospital = this.hospitalService.RetrieveHospitalByIdAsync(doctorId);
+                return Ok(hospital);
             }
             catch (Exception ex)
             {
