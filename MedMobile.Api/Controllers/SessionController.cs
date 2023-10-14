@@ -73,7 +73,8 @@ namespace MedMobile.Api.Controllers
         {
             try
             {
-                var sessions = await sessionService.GetAllSessions(doctorIds, userIds, statuses, skip, take);
+                var sessions = await sessionService.GetAllSessionsAsync(doctorIds, userIds, statuses, skip, take);
+                return Ok(sessions);
             }
             catch (Exception ex)
             {
