@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using System;
 using MedMobile.Api.ViewModels.Sessions;
 using RESTFulSense.Controllers;
+using MedMobile.Api.Models.Sessions;
+using System.Collections.Generic;
+using MedMobile.Api.ViewModels.Pagination;
 
 namespace MedMobile.Api.Controllers
 {
@@ -52,12 +55,25 @@ namespace MedMobile.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<SessionForGetViewModel>> RetrieveSessionById(Guid sessionId)
+        public async Task<ActionResult<SessionForGetViewModel>> GetSessionById(Guid sessionId)
         {
             try
             {
-                var timeLineId = await sessionService.RetrieveSessionByIdAsync(sessionId);
+                var timeLineId = await sessionService.GetSessionByIdAsync(sessionId);
                 return Ok(timeLineId);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<PaginationResponse>> GetAllSessions(List<Guid> doctorIds, List<Guid> userIds, List<Status> statuses, int skip, int take)
+        {
+            try
+            {
+                var sessions = await sessionService.GetAllSessions(doctorIds, userIds, statuses, skip, take);
             }
             catch (Exception ex)
             {

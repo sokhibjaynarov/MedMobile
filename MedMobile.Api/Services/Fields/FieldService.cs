@@ -72,11 +72,11 @@ namespace MedMobile.Api.Services.Fields
                 return await storageBroker.DeleteFieldAsync(maybeField);
             });
 
-        public IQueryable<Field> RetrieveAllFields() =>
+        public IQueryable<Field> GetAllFields() =>
             TryCatch(() =>
                  this.storageBroker.SelectAllFields());
 
-        public ValueTask<Field> RetrieveFieldByIdAsync(Guid fieldId) =>
+        public ValueTask<Field> GetFieldByIdAsync(Guid fieldId) =>
             TryCatch(async () =>
             {
                 Field maybeField =

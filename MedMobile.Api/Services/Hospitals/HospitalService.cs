@@ -102,7 +102,7 @@ namespace MedMobile.Api.Services.Hospitals
                 return await storageBroker.DeleteHospitalAsync(maybeHospital);
             });
 
-        public IQueryable<Hospital> RetrieveAllHospitals()
+        public IQueryable<Hospital> GetAllHospitals()
         {
             try
             {
@@ -115,7 +115,7 @@ namespace MedMobile.Api.Services.Hospitals
             }
         }
 
-        public async ValueTask<Hospital> RetrieveHospitalByIdAsync(Guid hospitalId)
+        public async ValueTask<Hospital> GetHospitalByIdAsync(Guid hospitalId)
         {
             try
             {

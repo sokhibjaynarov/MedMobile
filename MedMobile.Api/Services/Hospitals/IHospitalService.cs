@@ -13,8 +13,8 @@ namespace MedMobile.Api.Services.Hospitals
     public interface IHospitalService
     {
         ValueTask<Guid> AddHospitalAsync(HospitalForCreateViewModel viewModel);
-        IQueryable<Hospital> RetrieveAllHospitals();
-        ValueTask<Hospital> RetrieveHospitalByIdAsync(Guid hospitalId);
+        IQueryable<Hospital> GetAllHospitals();
+        ValueTask<Hospital> GetHospitalByIdAsync(Guid hospitalId);
         ValueTask<Hospital> ModifyHospitalAsync(Hospital hospital);
         ValueTask<Hospital> RemoveHospitalByIdAsync(Guid hospitalId);
     }

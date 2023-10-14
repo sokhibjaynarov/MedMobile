@@ -114,7 +114,7 @@ namespace MedMobile.Api.Services.Doctors
             }
         }
 
-        public IQueryable<Doctor> RetrieveAllDoctors()
+        public IQueryable<Doctor> GetAllDoctors()
         {
             try
             {
@@ -127,7 +127,7 @@ namespace MedMobile.Api.Services.Doctors
             }
         }
 
-        public async ValueTask<Doctor> RetrieveDoctorByIdAsync(Guid doctorId)
+        public async ValueTask<Doctor> GetDoctorByIdAsync(Guid doctorId)
         {
             try
             {

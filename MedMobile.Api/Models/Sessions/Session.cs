@@ -2,6 +2,8 @@
 // Copyright (c) DevZilla team
 // ---------------------------------------------------------------
 
+using MedMobile.Api.Models.TimeLines;
+using MedMobile.Api.Models.Users;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -26,8 +28,8 @@ namespace MedMobile.Api.Models.Sessions
         public Status Status { get; set; } = Status.Waiting;
 
 
-        //public virtual User User { get; set; }
+        public virtual User User { get; set; }
 
-        //public virtual TimeLine TimeLine { get; set; }
+        public virtual TimeLine TimeLine { get; set; }
     }
 }

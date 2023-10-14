@@ -116,7 +116,7 @@ namespace MedMobile.Api.Services.TimeLines
             }
         }
 
-        public async Task<IEnumerable<TimeLineForGetViewModel>> RetrieveDoctorTimeLinesAsync(Guid doctorUserId, DateTime? fromDateTime, DateTime? toDateTime)
+        public async Task<IEnumerable<TimeLineForGetViewModel>> GetDoctorTimeLinesAsync(Guid doctorUserId, DateTime? fromDateTime, DateTime? toDateTime)
         {
             try
             {
@@ -131,7 +131,7 @@ namespace MedMobile.Api.Services.TimeLines
                     timeLineQuery = timeLineQuery.Where(a => a.EndDateTime <= toDateTime);
                 }
 
-                var timeLines = await timeLineQuery.Select(a => new TimeLineForGetViewModel
+                var timeLines = await timeLineQuery.OrderBy(a => a.StartDateTime).Select(a => new TimeLineForGetViewModel
                 {
                     TimeLineId = a.TimeLineId,
                     StartDateTime = a.StartDateTime,

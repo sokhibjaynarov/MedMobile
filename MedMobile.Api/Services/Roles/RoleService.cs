@@ -43,7 +43,7 @@ namespace MedMobile.Api.Services.Roles
             }
         }
 
-        public IQueryable<Role> RetrieveAllRoles()
+        public IQueryable<Role> GetAllRoles()
         {
             try
             {
@@ -56,7 +56,7 @@ namespace MedMobile.Api.Services.Roles
             }
         }
 
-        public async ValueTask<Role> RetrieveRoleByIdAsync(Guid roleId)
+        public async ValueTask<Role> GetRoleByIdAsync(Guid roleId)
         {
             try
             {

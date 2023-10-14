@@ -25,7 +25,7 @@ namespace MedMobile.Api.Controllers
         {
             try
             {
-                var doctors = this.doctorService.RetrieveAllDoctors();
+                var doctors = this.doctorService.GetAllDoctors();
                 return Ok(doctors);
             }
             catch (Exception ex)
@@ -39,7 +39,7 @@ namespace MedMobile.Api.Controllers
         {
             try
             {
-                var doctor = this.doctorService.RetrieveDoctorByIdAsync(doctorId);
+                var doctor = this.doctorService.GetDoctorByIdAsync(doctorId);
                 return Ok(doctor);
             }
             catch (Exception ex)

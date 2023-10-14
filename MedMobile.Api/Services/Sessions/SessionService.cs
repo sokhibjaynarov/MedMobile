@@ -15,6 +15,9 @@ using MedMobile.Api.StaticFunctions;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Microsoft.Extensions.Logging.Abstractions;
+using System.Collections.Generic;
+using MedMobile.Api.ViewModels.Pagination;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedMobile.Api.Services.Sessions
 {
@@ -94,11 +97,36 @@ namespace MedMobile.Api.Services.Sessions
             }
         }
 
-        public IQueryable<Session> RetrieveAllSessions()
+        public async Task<PaginationResponse> GetAllSessionsAsync(List<Guid> doctorIds, List<Guid> userIds, List<Status> statuses, int skip, int take)
         {
             try
             {
-                return null;
+                var sessionQuery = storageBroker.SelectAllSessions();
+
+                if (userIds != null && userIds.Any())
+                {
+                    sessionQuery = sessionQuery.Where(a => userIds.Contains(a.UserId));
+                }
+
+                if (statuses != null && statuses.Any())
+                {
+                    sessionQuery = sessionQuery.Where(a => statuses.Contains(a.Status));
+                }
+
+                var count = sessionQuery.Count();
+
+                var sessions = await sessionQuery.Select(a => new SessionForGetViewModel
+                {
+                    SessionId = a.SessionId,
+                    StartDateTime = a.TimeLine.StartDateTime,
+                    EndDateTime = a.TimeLine.EndDateTime,
+                    CanceledBy = a.CanceledBy,
+                    ReasonOfCanceling = a.ReasonOfCanceling,
+                    Status = a.Status
+                }).OrderBy(a => a.StartDateTime).Skip(skip).Take(take).ToListAsync();
+
+                var result = new PaginationResponse(sessions, skip, take, count);
+                return result;
             }
             catch (Exception ex)
             {
@@ -107,7 +135,7 @@ namespace MedMobile.Api.Services.Sessions
             }
         }
 
-        public async ValueTask<SessionForGetViewModel> RetrieveSessionByIdAsync(Guid sessionId)
+        public async ValueTask<SessionForGetViewModel> GetSessionByIdAsync(Guid sessionId)
         {
             try
             {

@@ -13,7 +13,7 @@ namespace MedMobile.Api.Services.TimeLines
     public interface ITimeLineService
     {
         ValueTask<Guid> AddTimeLineAsync(TimeLineForCreateViewModel viewModel);
-        Task<IEnumerable<TimeLineForGetViewModel>> RetrieveDoctorTimeLinesAsync(Guid doctorUserId, DateTime? fromDateTime, DateTime? toDateTime);
+        Task<IEnumerable<TimeLineForGetViewModel>> GetDoctorTimeLinesAsync(Guid doctorUserId, DateTime? fromDateTime, DateTime? toDateTime);
         ValueTask<bool> RemoveTimeLineByIdAsync(TimeLineForRemoveViewModel timeLineId);
     }
 }

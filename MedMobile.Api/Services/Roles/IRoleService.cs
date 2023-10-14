@@ -12,7 +12,7 @@ namespace MedMobile.Api.Services.Roles
     public interface IRoleService
     {
         ValueTask<Role> AddRoleAsync(string roleName);
-        ValueTask<Role> RetrieveRoleByIdAsync(Guid roleId);
-        IQueryable<Role> RetrieveAllRoles();
+        ValueTask<Role> GetRoleByIdAsync(Guid roleId);
+        IQueryable<Role> GetAllRoles();
     }
 }
