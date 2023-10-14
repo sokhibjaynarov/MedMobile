@@ -36,12 +36,22 @@ namespace MedMobile.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddDbContext<StorageBroker>();
             AddBrokers(services);
             AddServices(services);
             services.ConfigureSwagger(Configuration);
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "_myAllowSpecificOrigins",
+                                  builder =>
+                                  {
+                                      builder.AllowAnyOrigin()
+                                               .AllowAnyMethod()
+                                               .AllowAnyHeader();
+                                  });
+            });
 
             services.AddIdentity<User, Role>()
                     .AddEntityFrameworkStores<StorageBroker>()
@@ -84,6 +94,7 @@ namespace MedMobile.Api
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseCors("_myAllowSpecificOrigins");
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
