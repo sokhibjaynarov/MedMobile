@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedMobile.Api.Migrations
 {
     [DbContext(typeof(StorageBroker))]
-    [Migration("20231014201234_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20231014202125_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
