@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------
 
 using MedMobile.Api.Models.Hospitals;
+using MedMobile.Api.Models.Users;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,9 +18,11 @@ namespace MedMobile.Api.Models.Doctors
         [ForeignKey(nameof(Hospital))]
         public Guid HospitalId { get; set; }
         public string Description { get; set; }
-
+        [ForeignKey(nameof(User))]
+        public Guid UserId { get; set; }
 
         public virtual Hospital Hospital { get; set; }
         public virtual DoctorField DoctorField { get; set; }
+        public virtual User User { get; set; }
     }
 }

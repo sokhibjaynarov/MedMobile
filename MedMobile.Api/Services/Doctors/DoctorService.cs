@@ -8,15 +8,20 @@ using System.Threading.Tasks;
 using System;
 using MedMobile.Api.Brokers.StorageBrokers;
 using MedMobile.Api.Models.Doctors;
+using MedMobile.Api.Brokers.Loggings;
+using MedMobile.Api.ViewModels.Doctors;
 
 namespace MedMobile.Api.Services.Doctors
 {
     public class DoctorService : IDoctorService
     {
+        private readonly ILoggingBroker loggingBroker;
         private readonly IStorageBroker storageBroker;
 
-        public DoctorService(IStorageBroker storageBroker)
+        public DoctorService(IStorageBroker storageBroker,
+            ILoggingBroker loggingBroker)
         {
+            this.loggingBroker = loggingBroker;
             this.storageBroker = storageBroker;
         }
 
@@ -31,6 +36,7 @@ namespace MedMobile.Api.Services.Doctors
             }
             catch (Exception ex)
             {
+                loggingBroker.LogError(ex);
                 throw new NotImplementedException();
             }
         }
@@ -43,34 +49,71 @@ namespace MedMobile.Api.Services.Doctors
             }
             catch (SqlException sqlException)
             {
+                loggingBroker.LogError(sqlException);
                 throw new NotImplementedException();
             }
         }
 
-        public ValueTask<Doctor> AddDoctorAsync(Doctor doctor) =>
-        TryCatch(async () =>
+        public async ValueTask<Doctor> AddDoctorAsync(DoctorForCreateViewModel viewModel)
         {
-                return await this.storageBroker.InsertDoctorAsync(doctor);
-        });
-
-
-        public ValueTask<Doctor> ModifyDoctorAsync(Doctor doctor) =>
-            TryCatch(async () =>
+            try
             {
-                Doctor maybeDoctor =
-                    await this.storageBroker.SelectDoctorByIdAsync(doctor.DoctorId);
+                if (viewModel.HospitalId == Guid.Empty || viewModel.UserId == Guid.Empty)
+                {
+                    throw new Exception();
+                }
+
+                Doctor doctor = new Doctor
+                {
+                    HospitalId = viewModel.HospitalId,
+                    UserId = viewModel.UserId,
+                    Description = viewModel.Description
+                };
+
+                return await storageBroker.InsertDoctorAsync(doctor);
+            }
+            catch (Exception ex)
+            {
+                loggingBroker.LogError(ex);
+                throw;
+            }
+        }
+
+
+        public async ValueTask<Doctor> ModifyDoctorAsync(DoctorForUpdateViewModel viewModel)
+        {
+            try
+            {
+                Doctor doctor = await storageBroker.SelectDoctorByIdAsync(viewModel.DoctorId);
                 return await storageBroker.UpdateDoctorAsync(doctor);
-            });
-
-
-        public ValueTask<Doctor> RemoveDoctorByIdAsync(Guid doctorId) =>
-            TryCatch(async () =>
+            }
+            catch (Exception ex)
             {
-                Doctor maybeDoctor =
-                await this.storageBroker.SelectDoctorByIdAsync(doctorId);
+                loggingBroker.LogError(ex);
+                throw;
+            }
+        }
 
-                return await storageBroker.DeleteDoctorAsync(maybeDoctor);
-            });
+
+        public async ValueTask<Doctor> RemoveDoctorByIdAsync(Guid doctorId)
+        {
+            try
+            {
+                var doctor = await storageBroker.SelectDoctorByIdAsync(doctorId);
+
+                if (doctor == null)
+                {
+                    throw new Exception();
+                }
+
+                return await storageBroker.DeleteDoctorAsync(doctor);
+            }
+            catch (Exception ex)
+            {
+                loggingBroker.LogError(ex);
+                throw;
+            }
+        }
 
         public IQueryable<Doctor> RetrieveAllDoctors() =>
             TryCatch(() =>
