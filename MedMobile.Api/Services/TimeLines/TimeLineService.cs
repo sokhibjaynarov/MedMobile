@@ -57,7 +57,10 @@ namespace MedMobile.Api.Services.TimeLines
                 {
                     DoctorUserId = viewModel.DoctorUserId,
                     StartDateTime = viewModel.StartDateTime,
-                    EndDateTime = viewModel.EndDateTime ?? viewModel.StartDateTime.AddHours(1)
+                    EndDateTime = viewModel.EndDateTime ?? viewModel.StartDateTime.AddHours(1),
+                    Title = viewModel.Title,
+                    Description = viewModel.Description,
+                    EventUrl = viewModel.EventUrl
                 };
 
                 TimeLine createdTimeLine = await storageBroker.InsertTimeLineAsync(timeLine);
@@ -140,6 +143,9 @@ namespace MedMobile.Api.Services.TimeLines
                     TimeLineId = a.TimeLineId,
                     StartDateTime = a.StartDateTime,
                     EndDateTime = a.EndDateTime,
+                    Title = a.Title,
+                    Description = a.Description,
+                    EventUrl = a.EventUrl,
                     IsBooked = sessionsTimeLineIds.Contains(a.TimeLineId)
                 }).ToListAsync();
 
