@@ -12,4 +12,4 @@ import reception from "./reception";
 // import uiElements from './ui-elements'
 
 // ** Merge & Export
-export default [...forms, ...apps, ...doctors, ...patients, ...reception];
+export default [...apps, ...doctors, ...patients, ...reception];
