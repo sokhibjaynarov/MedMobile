@@ -3,10 +3,28 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 
 // ** Axios Imports
 import axios from 'axios'
+import {getDoctorTimeLines} from "../../../../api/time";
+import {getUserData} from "../../../../auth/utils";
 
 export const fetchEvents = createAsyncThunk('appCalendar/fetchEvents', async calendars => {
-    const response = await axios.get('/apps/calendar/events', {calendars})
-    return response.data
+    let response = []
+    await getDoctorTimeLines({doctorUserId: getUserData().userId}).then(({data}) => {
+        response = data?.map(item => ({
+                title: item.title,
+                description: item.description,
+                start: item.startDateTime,
+                end: item.endDateTime,
+                extendedProps: {
+                    url: item?.url
+                }
+            })
+        )
+    })
+    await axios.get('/apps/calendar/events', {calendars})
+    return response
+})
+export const setEvents = createAsyncThunk('appCalendar/fetchEvents', async events => {
+    return events
 })
 
 export const addEvent = createAsyncThunk('appCalendar/addEvent', async (event, {dispatch, getState}) => {

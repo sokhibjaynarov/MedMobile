@@ -169,7 +169,7 @@ const AddEventSidebar = (props) => {
       const calendar = selectedEvent.extendedProps.calendar;
 
       const resolveLabel = () => {
-        if (calendar.length) {
+        if (calendar?.length) {
           return {
             label: calendar,
             value: calendar,
