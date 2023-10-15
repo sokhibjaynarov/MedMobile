@@ -131,7 +131,6 @@ const UsersList = () => {
     <Fragment>
       <Card>
         <CardHeader>
-          <CardTitle tag="h4">Filters</CardTitle>
           <Button onClick={toggleSidebar} className="btn-icon" color="primary">
             Qo'shish
           </Button>
