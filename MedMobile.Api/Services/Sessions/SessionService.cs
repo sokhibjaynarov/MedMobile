@@ -71,12 +71,10 @@ namespace MedMobile.Api.Services.Sessions
             }
         }
 
-        public async ValueTask<bool> CallUserForSessionAsync(Guid userId)
+        public async ValueTask<bool> CallUserForSessionAsync(Guid userId, Guid currentUserId)
         {
             try
             {
-                var currentUserId = Guid.Parse(this.httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
                 var sessions = await this.storageBroker.SelectAllSessions().Where(p => p.Status == Status.Waiting && 
                                 ((p.TimeLine.DoctorUserId == currentUserId && p.UserId == userId) ||
                                 (p.TimeLine.DoctorUserId == currentUserId && p.UserId == userId))).ToListAsync();
@@ -125,7 +123,13 @@ namespace MedMobile.Api.Services.Sessions
         {
             try
             {
-                
+                var session = await this.storageBroker.SelectSessionByIdAsync(sessionId);
+
+                if (session == null)
+                {
+                    session.Status = Status.Completed;
+                    await this.storageBroker.UpdateSessionAsync(session);
+                }
             }
             catch (Exception ex)
             {

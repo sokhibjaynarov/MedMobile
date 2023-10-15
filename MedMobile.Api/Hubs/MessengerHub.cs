@@ -22,9 +22,9 @@ namespace MedMobile.Api.Hubs
             this.sessionService = sessionService;
         }
 
-        public async Task<bool> CallUserForSession(Guid userId)
+        public async Task<bool> CallUserForSession(Guid userId, Guid currentUserId)
         {
-            return await this.sessionService.CallUserForSessionAsync(userId);
+            return await this.sessionService.CallUserForSessionAsync(userId, currentUserId);
         }
     }
 }
