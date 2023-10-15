@@ -1,8 +1,8 @@
 // ** React Import
 import { useState } from "react";
 import Sidebar from "@components/sidebar";
-import { Controller, useForm } from "react-hook-form";
 import { createHospital } from "@/api/hospital";
+import { Controller, useForm } from "react-hook-form";
 import InputPasswordToggle from "@components/input-password-toggle";
 import { Button, Form, FormFeedback, Input, Label } from "reactstrap";
 
@@ -36,9 +36,11 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
   const onSubmit = (data) => {
     setData(data);
     if (checkIsValid(data)) {
-      createHospital({ location: "location", ...data }).then((res) =>
-        toggleSidebar()
-      );
+      createHospital({
+        latitude: "69.278425",
+        longitude: "41.312251",
+        ...data,
+      }).then((res) => toggleSidebar());
     } else {
       for (const key in data) {
         if (data[key] === null) {

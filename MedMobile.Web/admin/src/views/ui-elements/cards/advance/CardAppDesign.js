@@ -63,7 +63,9 @@ const CardAppDesign = (props) => {
       <CardBody>
         <Badge color="light-primary">{moment().format("DD.MM.YYYY")}</Badge>
         <CardTitle className="mt-1 mb-75">{name}</CardTitle>
-        <CardText className="font-small-2 mb-2">{description}</CardText>
+        <CardText className="font-small-2 text-ellipsis mb-2">
+          {description}
+        </CardText>
         <div className="design-group pt-25">
           <h6 className="section-label">Shifokorlar</h6>
           {avatarArr.map((obj, index) => {

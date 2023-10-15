@@ -375,6 +375,11 @@
       margin-right: 0.6rem;
     }
   }
+  .text-ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 
   .design-planning-wrapper {
     width: 100%;
@@ -386,8 +391,8 @@
     }
 
     .design-planning {
-      white-space: nowrap;
       overflow: hidden;
+      white-space: nowrap;
       text-overflow: ellipsis;
       margin-bottom: 0.2rem;
       text-align: center;
