@@ -18,6 +18,9 @@ using Microsoft.Extensions.Logging.Abstractions;
 using System.Collections.Generic;
 using MedMobile.Api.ViewModels.Pagination;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
+using MedMobile.Api.Hubs;
+using MedMobile.Api.Models.Users;
 
 namespace MedMobile.Api.Services.Sessions
 {
@@ -26,15 +29,18 @@ namespace MedMobile.Api.Services.Sessions
         private readonly ILoggingBroker loggingBroker;
         private readonly IStorageBroker storageBroker;
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IHubContext<MessengerHub, IMessengerClient> hubContext;
 
         public SessionService(
-            ILoggingBroker loggingBroker, 
-            IStorageBroker storageBroker, 
-            IHttpContextAccessor httpContextAccessor)
+            ILoggingBroker loggingBroker,
+            IStorageBroker storageBroker,
+            IHttpContextAccessor httpContextAccessor,
+            IHubContext<MessengerHub, IMessengerClient> hubContext)
         {
             this.loggingBroker = loggingBroker;
             this.storageBroker = storageBroker;
             this.httpContextAccessor = httpContextAccessor;
+            this.hubContext = hubContext;
         }
 
         public async ValueTask<Guid> AddSessionAsync(SessionForCreateViewModel viewModel)
@@ -65,6 +71,68 @@ namespace MedMobile.Api.Services.Sessions
             }
         }
 
+        public async ValueTask<bool> CallUserForSessionAsync(Guid userId)
+        {
+            try
+            {
+                var currentUserId = Guid.Parse(this.httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+                var sessions = await this.storageBroker.SelectAllSessions().Where(p => p.Status == Status.Waiting && 
+                                ((p.TimeLine.DoctorUserId == currentUserId && p.UserId == userId) ||
+                                (p.TimeLine.DoctorUserId == currentUserId && p.UserId == userId))).ToListAsync();
+
+                if (!sessions.Any())
+                {
+                    return false;
+                }
+
+                await this.hubContext.Clients.User(userId.ToString()).OnSessionCall(currentUserId);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                loggingBroker.LogError(ex);
+                throw;
+            }
+        }
+
+        public async ValueTask AvailableSessionAsync()
+        {
+            try
+            {
+                var availableSessions = await this.storageBroker.SelectAllSessions().Include(p => p.TimeLine).Where(p => p.Status == Status.Waiting && 
+                                        (p.TimeLine.StartDateTime >= DateTime.UtcNow || p.TimeLine.StartDateTime <= DateTime.UtcNow.AddMinutes(-5))).ToListAsync();
+
+                if (availableSessions.Any())
+                {
+                    foreach(var availableSession in availableSessions)
+                    {
+                        await hubContext.Clients.User(availableSession.UserId.ToString())
+                            .OnAvailableSession(availableSession.SessionId, availableSession.TimeLine.DoctorUserId);
+                        await hubContext.Clients.User(availableSession.TimeLine.DoctorUserId.ToString())
+                            .OnAvailableSession(availableSession.SessionId, availableSession.UserId);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                loggingBroker.LogError(ex);
+                throw;
+            }
+        }
+
+        public async ValueTask EndCallSessionAsync(Guid sessionId)
+        {
+            try
+            {
+                
+            }
+            catch (Exception ex)
+            {
+                loggingBroker.LogError(ex);
+                throw;
+            }
+        }
 
         public async ValueTask<bool> CancelSessionAsync(SessionForCancelViewModel viewModel)
         {

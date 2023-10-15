@@ -17,5 +17,7 @@ namespace MedMobile.Api.Services.Sessions
         ValueTask<bool> CancelSessionAsync(SessionForCancelViewModel viewModel);
         Task<PaginationResponse> GetAllSessionsAsync(List<Guid> doctorIds, List<Guid> userIds, List<Status> statuses, int skip, int take);
         ValueTask<SessionForGetViewModel> GetSessionByIdAsync(Guid sessionId);
+        ValueTask<bool> CallUserForSessionAsync(Guid userId);
+        ValueTask AvailableSessionAsync();
     }
 }
