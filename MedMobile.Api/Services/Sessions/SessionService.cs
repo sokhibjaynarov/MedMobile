@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.SignalR;
 using MedMobile.Api.Hubs;
 using MedMobile.Api.Models.Users;
+using Microsoft.AspNetCore.Http;
 
 namespace MedMobile.Api.Services.Sessions
 {
