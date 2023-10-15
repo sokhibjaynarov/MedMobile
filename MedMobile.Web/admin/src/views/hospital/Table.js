@@ -56,11 +56,21 @@ const UsersList = () => {
     );
   };
 
+  const renderContent = () =>
+    hospitals.length ? (
+      hospitals.map((item, index) => (
+        <Col md="4" sm="12" className="mb-1">
+          <CardAppDesign key={index} {...item} />
+        </Col>
+      ))
+    ) : (
+      <CardText className="text-center">Ma'lumot mavjud emas</CardText>
+    );
+
   return (
     <Fragment>
       <Card>
-        <CardHeader>
-          <CardTitle tag="h4">Filters</CardTitle>
+        <CardHeader className="flex justify-content-end">
           <Button onClick={toggleSidebar} className="btn-icon" color="primary">
             Qo'shish
           </Button>
@@ -74,13 +84,7 @@ const UsersList = () => {
         </CardBody>
       </Card>
       <UILoader blocking={loading} loader={<Loader />}>
-        <Row>
-          {hospitals.map((item, index) => (
-            <Col md="4" sm="12" className="mb-1">
-              <CardAppDesign key={index} {...item} />
-            </Col>
-          ))}
-        </Row>
+        <Row>{renderContent()}</Row>
       </UILoader>
       <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />
     </Fragment>

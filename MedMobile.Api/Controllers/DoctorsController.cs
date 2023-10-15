@@ -9,7 +9,6 @@ using System.Collections.Generic;
 
 namespace MedMobile.Api.Controllers
 {
-    [Authorize]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class DoctorsController : RESTFulController

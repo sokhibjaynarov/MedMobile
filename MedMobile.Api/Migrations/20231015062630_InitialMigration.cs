@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MedMobile.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,6 +29,24 @@ namespace MedMobile.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Files",
+                schema: "MedMobile",
+                columns: table => new
+                {
+                    FileId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MimeType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Extension = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Content = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    Size = table.Column<long>(type: "bigint", nullable: false),
+                    AuthorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Files", x => x.FileId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Hospitals",
                 schema: "MedMobile",
                 columns: table => new
@@ -36,7 +54,6 @@ namespace MedMobile.Api.Migrations
                     HospitalId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Website = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -328,15 +345,13 @@ namespace MedMobile.Api.Migrations
                 name: "IX_DoctorFields_DoctorId",
                 schema: "MedMobile",
                 table: "DoctorFields",
-                column: "DoctorId",
-                unique: true);
+                column: "DoctorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DoctorFields_FieldId",
                 schema: "MedMobile",
                 table: "DoctorFields",
-                column: "FieldId",
-                unique: true);
+                column: "FieldId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Doctors_HospitalId",
@@ -420,6 +435,10 @@ namespace MedMobile.Api.Migrations
         {
             migrationBuilder.DropTable(
                 name: "DoctorFields",
+                schema: "MedMobile");
+
+            migrationBuilder.DropTable(
+                name: "Files",
                 schema: "MedMobile");
 
             migrationBuilder.DropTable(

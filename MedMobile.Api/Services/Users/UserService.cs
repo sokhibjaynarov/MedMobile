@@ -15,6 +15,7 @@ using MedMobile.Api.ViewModels.Hospitals;
 using MedMobile.Api.ViewModels.Doctors;
 using MedMobile.Api.Models.Doctors;
 using MedMobile.Api.Models.Hospitals;
+using MedMobile.Api.ViewModels.Patients;
 
 namespace MedMobile.Api.Services.Users
 {
@@ -31,7 +32,7 @@ namespace MedMobile.Api.Services.Users
             this.storageBroker = storageBroker;
         }
 
-        public async ValueTask<Guid> RegisterPatientAsync(RegisterPatientViewModel viewModel)
+        public async ValueTask<PatientForGetViewModel> RegisterPatientAsync(RegisterPatientViewModel viewModel)
         {
             try
             {
@@ -59,7 +60,17 @@ namespace MedMobile.Api.Services.Users
                 var roles = new List<string>() { "Patient" };
                 await this.userManagementBroker.AddToRolesAsync(newUser, roles);
 
-                return newUser.Id;
+                var result = new PatientForGetViewModel
+                {
+                    UserId = newUser.Id,
+                    FirstName = newUser.FirstName,
+                    LastName = newUser.LastName,
+                    FatherName = newUser.FatherName,
+                    PassportNumber = newUser.PassportNumber,
+                    Email = newUser.Email,
+                    PhoneNumber = newUser.PhoneNumber
+                };
+                return result;
             }
             catch (Exception ex)
             {

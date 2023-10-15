@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace MedMobile.Api.Controllers
 {
-    [Authorize]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class TimeLineController: RESTFulController

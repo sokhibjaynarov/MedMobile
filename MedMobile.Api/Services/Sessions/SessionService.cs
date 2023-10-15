@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------
 
 using MedMobile.Api.Models.Sessions;
-using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
@@ -12,12 +11,13 @@ using MedMobile.Api.Brokers.Loggings;
 using MedMobile.Api.Models.TimeLines;
 using MedMobile.Api.ViewModels.Sessions;
 using MedMobile.Api.StaticFunctions;
-using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
-using Microsoft.Extensions.Logging.Abstractions;
 using System.Collections.Generic;
 using MedMobile.Api.ViewModels.Pagination;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
+using MedMobile.Api.Hubs;
+using MedMobile.Api.Models.Users;
+using Microsoft.AspNetCore.Http;
 
 namespace MedMobile.Api.Services.Sessions
 {
@@ -26,22 +26,24 @@ namespace MedMobile.Api.Services.Sessions
         private readonly ILoggingBroker loggingBroker;
         private readonly IStorageBroker storageBroker;
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IHubContext<MessengerHub, IMessengerClient> hubContext;
 
         public SessionService(
-            ILoggingBroker loggingBroker, 
-            IStorageBroker storageBroker, 
-            IHttpContextAccessor httpContextAccessor)
+            ILoggingBroker loggingBroker,
+            IStorageBroker storageBroker,
+            IHttpContextAccessor httpContextAccessor,
+            IHubContext<MessengerHub, IMessengerClient> hubContext)
         {
             this.loggingBroker = loggingBroker;
             this.storageBroker = storageBroker;
             this.httpContextAccessor = httpContextAccessor;
+            this.hubContext = hubContext;
         }
 
         public async ValueTask<Guid> AddSessionAsync(SessionForCreateViewModel viewModel)
         {
             try
             {
-                var userId = Guid.Parse(httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 TimeLine timeLine = await storageBroker.SelectTimeLineByIdAsync(viewModel.TimeLineId);
                 
                 if (timeLine == null)
@@ -52,7 +54,7 @@ namespace MedMobile.Api.Services.Sessions
                 var session = new Session
                 {
                     TimeLineId = viewModel.TimeLineId,
-                    UserId = userId
+                    UserId = viewModel.UserId
                 };
 
                 Session createdSession = await storageBroker.InsertSessionAsync(session);
@@ -65,12 +67,77 @@ namespace MedMobile.Api.Services.Sessions
             }
         }
 
+        public async ValueTask<bool> CallUserForSessionAsync(Guid userId, Guid currentUserId)
+        {
+            try
+            {
+                var sessions = await this.storageBroker.SelectAllSessions().Where(p => p.Status == Status.Waiting && 
+                                ((p.TimeLine.DoctorUserId == currentUserId && p.UserId == userId) ||
+                                (p.TimeLine.DoctorUserId == currentUserId && p.UserId == userId))).ToListAsync();
+
+                if (!sessions.Any())
+                {
+                    return false;
+                }
+
+                await this.hubContext.Clients.User(userId.ToString()).OnSessionCall(currentUserId);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                loggingBroker.LogError(ex);
+                throw;
+            }
+        }
+
+        public async ValueTask AvailableSessionAsync()
+        {
+            try
+            {
+                var availableSessions = await this.storageBroker.SelectAllSessions().Include(p => p.TimeLine).Where(p => p.Status == Status.Waiting && 
+                                        (p.TimeLine.StartDateTime >= DateTime.UtcNow || p.TimeLine.StartDateTime <= DateTime.UtcNow.AddMinutes(-5))).ToListAsync();
+
+                if (availableSessions.Any())
+                {
+                    foreach(var availableSession in availableSessions)
+                    {
+                        await hubContext.Clients.User(availableSession.UserId.ToString())
+                            .OnAvailableSession(availableSession.SessionId, availableSession.TimeLine.DoctorUserId);
+                        await hubContext.Clients.User(availableSession.TimeLine.DoctorUserId.ToString())
+                            .OnAvailableSession(availableSession.SessionId, availableSession.UserId);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                loggingBroker.LogError(ex);
+                throw;
+            }
+        }
+
+        public async ValueTask EndCallSessionAsync(Guid sessionId)
+        {
+            try
+            {
+                var session = await this.storageBroker.SelectSessionByIdAsync(sessionId);
+
+                if (session == null)
+                {
+                    session.Status = Status.Completed;
+                    await this.storageBroker.UpdateSessionAsync(session);
+                }
+            }
+            catch (Exception ex)
+            {
+                loggingBroker.LogError(ex);
+                throw;
+            }
+        }
 
         public async ValueTask<bool> CancelSessionAsync(SessionForCancelViewModel viewModel)
         {
             try
             {
-                var userId = Guid.Parse(httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 Session session = await storageBroker.SelectSessionByIdAsync(viewModel.SessionId);
 
                 if (session == null)
@@ -79,12 +146,12 @@ namespace MedMobile.Api.Services.Sessions
                 }
 
                 TimeLine timeLine = await storageBroker.SelectTimeLineByIdAsync(session.TimeLineId);
-                if (session.UserId != userId && timeLine.DoctorUserId != userId)
+                if (session.UserId != viewModel.UserId && timeLine.DoctorUserId != viewModel.UserId)
                 {
                     throw new Exception(ResponseMessages.ERROR_NOT_ALLOWED_DATA);
                 }
 
-                session.CanceledBy = userId;
+                session.CanceledBy = viewModel.UserId;
                 session.ReasonOfCanceling = viewModel.ReasonOfCancelling;
                 session.Status = Status.Canceled;
                 await storageBroker.UpdateSessionAsync(session);
