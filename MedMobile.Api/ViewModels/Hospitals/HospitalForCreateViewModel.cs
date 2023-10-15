@@ -3,11 +3,13 @@
 // ---------------------------------------------------------------
 
 using MedMobile.Api.ViewModels.Users;
+using System;
 
 namespace MedMobile.Api.ViewModels.Hospitals
 {
     public class HospitalForCreateViewModel
     {
+        public Guid HospitalId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
 

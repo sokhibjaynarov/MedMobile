@@ -1,5 +1,6 @@
 ﻿using MedMobile.Api.Services.Fields;
 using MedMobile.Api.ViewModels.Pagination;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 using System;

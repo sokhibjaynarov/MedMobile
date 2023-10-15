@@ -4,6 +4,7 @@
 
 using MedMobile.Api.Models.Files;
 using MedMobile.Api.Services.Files;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 using System;

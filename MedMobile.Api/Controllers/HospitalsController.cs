@@ -11,6 +11,7 @@ using MedMobile.Api.ViewModels.Hospitals;
 using MedMobile.Api.Models.Doctors;
 using MedMobile.Api.Models.Hospitals;
 using MedMobile.Api.ViewModels.Pagination;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MedMobile.Api.Controllers
 {
@@ -32,10 +33,12 @@ namespace MedMobile.Api.Controllers
         {
             try
             {
-                var userId = await this.hospitalService.AddHospitalAsync(viewModel);
+                var hospitalId = await this.hospitalService.AddHospitalAsync(viewModel);
+
+                viewModel.HospitalId = hospitalId;
 
                 await this.userService.AddHospitalAdminAsync(viewModel);
-                return Ok(userId);
+                return Ok(hospitalId);
             }
             catch (Exception ex)
             {

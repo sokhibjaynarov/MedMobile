@@ -9,6 +9,7 @@ using System;
 using MedMobile.Api.Services.TimeLines;
 using MedMobile.Api.ViewModels.TimeLines;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MedMobile.Api.Controllers
 {
