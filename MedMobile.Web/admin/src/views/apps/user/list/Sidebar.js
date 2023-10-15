@@ -1,72 +1,46 @@
 // ** React Import
-import { useState } from 'react'
+import { useEffect, useState } from "react";
 
 // ** Custom Components
-import Sidebar from '@components/sidebar'
+import Sidebar from "@components/sidebar";
 
 // ** Utils
-import { selectThemeColors } from '@utils'
 
 // ** Third Party Components
-import Select from 'react-select'
-import classnames from 'classnames'
-import { useForm, Controller } from 'react-hook-form'
+import { Controller, useForm } from "react-hook-form";
 
 // ** Reactstrap Imports
-import { Button, Label, FormText, Form, Input } from 'reactstrap'
+import { Button, Form, FormFeedback, Input, Label } from "reactstrap";
 
 // ** Store & Actions
-import { addUser } from '../store'
-import { useDispatch } from 'react-redux'
+import { addUser } from "../store";
+import { useDispatch } from "react-redux";
+import InputPasswordToggle from "@components/input-password-toggle";
+import { createHospital, fetchAllHospital } from "@/api/hospital";
 
 const defaultValues = {
-  email: '',
-  contact: '',
-  company: '',
-  fullName: '',
-  username: '',
-  country: null
-}
+  email: "",
+  contact: "",
+  company: "",
+  fullName: "",
+  username: "",
+  country: null,
+};
 
-const countryOptions = [
-  { label: 'Australia', value: 'Australia' },
-  { label: 'Bangladesh', value: 'Bangladesh' },
-  { label: 'Belarus', value: 'Belarus' },
-  { label: 'Brazil', value: 'Brazil' },
-  { label: 'Canada', value: 'Canada' },
-  { label: 'China', value: 'China' },
-  { label: 'France', value: 'France' },
-  { label: 'Germany', value: 'Germany' },
-  { label: 'India', value: 'India' },
-  { label: 'Indonesia', value: 'Indonesia' },
-  { label: 'Israel', value: 'Israel' },
-  { label: 'Italy', value: 'Italy' },
-  { label: 'Japan', value: 'Japan' },
-  { label: 'Korea', value: 'Korea' },
-  { label: 'Mexico', value: 'Mexico' },
-  { label: 'Philippines', value: 'Philippines' },
-  { label: 'Russia', value: 'Russia' },
-  { label: 'South', value: 'South' },
-  { label: 'Thailand', value: 'Thailand' },
-  { label: 'Turkey', value: 'Turkey' },
-  { label: 'Ukraine', value: 'Ukraine' },
-  { label: 'United Arab Emirates', value: 'United Arab Emirates' },
-  { label: 'United Kingdom', value: 'United Kingdom' },
-  { label: 'United States', value: 'United States' }
-]
-
-const checkIsValid = data => {
-  return Object.values(data).every(field => (typeof field === 'object' ? field !== null : field.length > 0))
-}
+const checkIsValid = (data) => {
+  return Object.values(data).every((field) =>
+    typeof field === "object" ? field !== null : field.length > 0
+  );
+};
 
 const SidebarNewUsers = ({ open, toggleSidebar }) => {
   // ** States
-  const [data, setData] = useState(null)
-  const [plan, setPlan] = useState('basic')
-  const [role, setRole] = useState('subscriber')
+  const [data, setData] = useState(null);
+  const [plan, setPlan] = useState("basic");
+  const [role, setRole] = useState("subscriber");
 
   // ** Store Vars
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   // ** Vars
   const {
@@ -74,184 +48,203 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
     setValue,
     setError,
     handleSubmit,
-    formState: { errors }
-  } = useForm({ defaultValues })
+    formState: { errors },
+  } = useForm();
 
   // ** Function to handle form submit
-  const onSubmit = data => {
-    setData(data)
+  const onSubmit = (data) => {
+    console.log("onSubmit user data", { data });
+    setData(data);
     if (checkIsValid(data)) {
-      toggleSidebar()
+      createHospital({ location: "location", ...data }).then((res) =>
+        console.log({ res })
+      );
+      toggleSidebar();
       dispatch(
         addUser({
           role,
-          avatar: '',
-          status: 'active',
+          avatar: "",
+          status: "active",
           email: data.email,
           currentPlan: plan,
-          billing: 'auto debit',
+          billing: "auto debit",
           company: data.company,
           contact: data.contact,
           fullName: data.fullName,
           username: data.username,
-          country: data.country.value
+          country: data.country.value,
         })
-      )
+      );
     } else {
       for (const key in data) {
         if (data[key] === null) {
-          setError('country', {
-            type: 'manual'
-          })
+          setError("country", {
+            type: "manual",
+          });
         }
         if (data[key] !== null && data[key].length === 0) {
           setError(key, {
-            type: 'manual'
-          })
+            type: "manual",
+          });
         }
       }
     }
-  }
+  };
 
   const handleSidebarClosed = () => {
     for (const key in defaultValues) {
-      setValue(key, '')
+      setValue(key, "");
     }
-    setRole('subscriber')
-    setPlan('basic')
-  }
+    setRole("subscriber");
+    setPlan("basic");
+  };
 
   return (
     <Sidebar
-      size='lg'
+      size="lg"
       open={open}
-      title='New User'
-      headerClassName='mb-1'
-      contentClassName='pt-0'
+      headerClassName="mb-1"
+      contentClassName="pt-0"
+      title="Tibbiyot muassasasi"
       toggleSidebar={toggleSidebar}
       onClosed={handleSidebarClosed}
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <div className='mb-1'>
-          <Label className='form-label' for='fullName'>
-            Full Name <span className='text-danger'>*</span>
+        <div className="mb-1">
+          <Label className="form-label" for="name">
+            Nomi <span className="text-danger">*</span>
           </Label>
           <Controller
-            name='fullName'
-            control={control}
-            render={({ field }) => (
-              <Input id='fullName' placeholder='John Doe' invalid={errors.fullName && true} {...field} />
-            )}
-          />
-        </div>
-        <div className='mb-1'>
-          <Label className='form-label' for='username'>
-            Username <span className='text-danger'>*</span>
-          </Label>
-          <Controller
-            name='username'
-            control={control}
-            render={({ field }) => (
-              <Input id='username' placeholder='johnDoe99' invalid={errors.username && true} {...field} />
-            )}
-          />
-        </div>
-        <div className='mb-1'>
-          <Label className='form-label' for='userEmail'>
-            Email <span className='text-danger'>*</span>
-          </Label>
-          <Controller
-            name='email'
+            name="name"
             control={control}
             render={({ field }) => (
               <Input
-                type='email'
-                id='userEmail'
-                placeholder='john.doe@example.com'
+                id="name"
+                placeholder="Kasalxona nomi"
+                invalid={errors.name && true}
+                {...field}
+              />
+            )}
+          />
+        </div>
+        <div className="mb-1">
+          <Label className="form-label" for="phoneNumber">
+            Telefon <span className="text-danger">*</span>
+          </Label>
+          <Controller
+            name="phoneNumber"
+            control={control}
+            render={({ field }) => (
+              <Input
+                id="phoneNumber"
+                placeholder="+998991701020"
+                invalid={errors.phoneNumber && true}
+                {...field}
+              />
+            )}
+          />
+        </div>
+        <div className="mb-1">
+          <Label className="form-label" for="email">
+            Email
+          </Label>
+          <Controller
+            id="email"
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <Input
+                autoFocus
+                type="email"
+                placeholder="user@example.com"
                 invalid={errors.email && true}
                 {...field}
               />
             )}
           />
-          <FormText color='muted'>You can use letters, numbers & periods</FormText>
+          {errors.email && <FormFeedback>{errors.email.message}</FormFeedback>}
         </div>
-
-        <div className='mb-1'>
-          <Label className='form-label' for='contact'>
-            Contact <span className='text-danger'>*</span>
+        <div className="mb-1">
+          <Label className="form-label" for="admin.email">
+            Admin email <span className="text-danger">*</span>
           </Label>
           <Controller
-            name='contact'
+            name="adminEmail"
             control={control}
             render={({ field }) => (
-              <Input id='contact' placeholder='(397) 294-5153' invalid={errors.contact && true} {...field} />
-            )}
-          />
-        </div>
-        <div className='mb-1'>
-          <Label className='form-label' for='company'>
-            Company <span className='text-danger'>*</span>
-          </Label>
-          <Controller
-            name='company'
-            control={control}
-            render={({ field }) => (
-              <Input id='company' placeholder='Company Pvt Ltd' invalid={errors.company && true} {...field} />
-            )}
-          />
-        </div>
-        <div className='mb-1'>
-          <Label className='form-label' for='country'>
-            Country <span className='text-danger'>*</span>
-          </Label>
-          <Controller
-            name='country'
-            control={control}
-            render={({ field }) => (
-              // <Input id='country' placeholder='Australia' invalid={errors.country && true} {...field} />
-              <Select
-                isClearable={false}
-                classNamePrefix='select'
-                options={countryOptions}
-                theme={selectThemeColors}
-                className={classnames('react-select', { 'is-invalid': data !== null && data.country === null })}
+              <Input
+                type="email"
+                id="adminEmail"
+                placeholder="user@mail.com"
+                invalid={errors.adminEmail && true}
                 {...field}
               />
             )}
           />
         </div>
-        <div className='mb-1'>
-          <Label className='form-label' for='user-role'>
-            User Role
-          </Label>
-          <Input type='select' id='user-role' name='user-role' value={role} onChange={e => setRole(e.target.value)}>
-            <option value='subscriber'>Subscriber</option>
-            <option value='editor'>Editor</option>
-            <option value='maintainer'>Maintainer</option>
-            <option value='author'>Author</option>
-            <option value='admin'>Admin</option>
-          </Input>
+        <div className="mb-1">
+          <div className="d-flex justify-content-between">
+            <Label className="form-label" for="password">
+              Parol
+            </Label>
+          </div>
+          <Controller
+            id="password"
+            name="password"
+            control={control}
+            render={({ field }) => (
+              <InputPasswordToggle
+                className="input-group-merge"
+                invalid={errors.password && true}
+                {...field}
+              />
+            )}
+          />
         </div>
-        <div className='mb-1' value={plan} onChange={e => setPlan(e.target.value)}>
-          <Label className='form-label' for='select-plan'>
-            Select Plan
+        <div className="mb-1">
+          <Label className="form-label" for="website">
+            Veb sayt
           </Label>
-          <Input type='select' id='select-plan' name='select-plan'>
-            <option value='basic'>Basic</option>
-            <option value='enterprise'>Enterprise</option>
-            <option value='company'>Company</option>
-            <option value='team'>Team</option>
-          </Input>
+          <Controller
+            name="website"
+            control={control}
+            render={({ field }) => (
+              <Input
+                id="website"
+                invalid={errors.website && true}
+                placeholder="https://www.website.uz"
+                {...field}
+              />
+            )}
+          />
         </div>
-        <Button type='submit' className='me-1' color='primary'>
-          Submit
+        <div className="mb-1">
+          <Label className="form-label" for="description">
+            Tavsif
+          </Label>
+          <Controller
+            control={control}
+            name="description"
+            render={({ field }) => (
+              <Input
+                rows="3"
+                type="textarea"
+                id="description"
+                placeholder="Tavsif"
+                {...field}
+              />
+            )}
+          />
+        </div>
+        <Button type="submit" className="me-1" color="primary">
+          Saqlash
         </Button>
-        <Button type='reset' color='secondary' outline onClick={toggleSidebar}>
-          Cancel
+        <Button type="reset" color="secondary" outline onClick={toggleSidebar}>
+          Bekor qilish
         </Button>
       </Form>
     </Sidebar>
-  )
-}
+  );
+};
 
-export default SidebarNewUsers
+export default SidebarNewUsers;

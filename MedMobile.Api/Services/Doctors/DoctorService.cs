@@ -25,35 +25,6 @@ namespace MedMobile.Api.Services.Doctors
             this.storageBroker = storageBroker;
         }
 
-        private delegate ValueTask<Doctor> ReturningDoctorFunction();
-        private delegate IQueryable<Doctor> ReturningDoctorsFunction();
-
-        private async ValueTask<Doctor> TryCatch(ReturningDoctorFunction returningDoctorFunction)
-        {
-            try
-            {
-                return await returningDoctorFunction();
-            }
-            catch (Exception ex)
-            {
-                loggingBroker.LogError(ex);
-                throw new NotImplementedException();
-            }
-        }
-
-        private IQueryable<Doctor> TryCatch(ReturningDoctorsFunction returningDoctorsFunction)
-        {
-            try
-            {
-                return returningDoctorsFunction();
-            }
-            catch (SqlException sqlException)
-            {
-                loggingBroker.LogError(sqlException);
-                throw new NotImplementedException();
-            }
-        }
-
         public async ValueTask<Doctor> AddDoctorAsync(DoctorForCreateViewModel viewModel)
         {
             try

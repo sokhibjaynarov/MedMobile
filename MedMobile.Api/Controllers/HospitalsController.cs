@@ -10,6 +10,7 @@ using MedMobile.Api.Services.Hospitals;
 using MedMobile.Api.ViewModels.Hospitals;
 using MedMobile.Api.Models.Doctors;
 using MedMobile.Api.Models.Hospitals;
+using MedMobile.Api.ViewModels.Pagination;
 
 namespace MedMobile.Api.Controllers
 {
@@ -43,11 +44,11 @@ namespace MedMobile.Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<Hospital> GetAllHospitals()
+        public async Task<ActionResult<PaginationResponse>> GetAllHospitals(string searchText, int skip = 0, int take = 20)
         {
             try
             {
-                var hospitals = this.hospitalService.GetAllHospitals();
+                var hospitals = await this.hospitalService.GetAllHospitalsAsync(searchText, skip, take);
                 return Ok(hospitals);
             }
             catch (Exception ex)

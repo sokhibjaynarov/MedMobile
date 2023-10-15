@@ -62,7 +62,7 @@ const UserDropdown = () => {
       >
         <div className="user-nav d-sm-flex d-none">
           <span className="user-name fw-bold">
-            {(userData && userData["username"]) || "John Doe"}
+            {(userData && userData["username"]) || "Admin"}
           </span>
           <span className="user-status">
             {(userData && userData.role) || "Admin"}

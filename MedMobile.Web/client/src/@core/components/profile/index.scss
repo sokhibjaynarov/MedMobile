@@ -1,0 +1,33 @@
+.profile-header-nav {
+  padding: 24px;
+}
+
+.profile-details-wrapper {
+  margin: 0;
+  width: 85%;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 0.5rem;
+  margin-left: auto;
+  column-gap: 1.5rem;
+  list-style-type: none;
+
+  li {
+    display: flex;
+    font-weight: 500;
+    line-height: 22px;
+    column-gap: 0.5rem;
+    align-items: center;
+    .detail__label {
+      font-size: 1.1rem;
+    }
+    .detail__value {
+      font-size: 1rem;
+    }
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+}
