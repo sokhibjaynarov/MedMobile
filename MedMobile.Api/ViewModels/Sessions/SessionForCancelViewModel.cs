@@ -9,6 +9,7 @@ namespace MedMobile.Api.ViewModels.Sessions
     public class SessionForCancelViewModel
     {
         public Guid SessionId { get; set; }
+        public Guid UserId { get; set; }
         public string ReasonOfCancelling { get; set; }
     }
 }
