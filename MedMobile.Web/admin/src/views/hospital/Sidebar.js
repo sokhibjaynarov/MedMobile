@@ -1,22 +1,10 @@
 // ** React Import
-import { useEffect, useState } from "react";
-
-// ** Custom Components
+import { useState } from "react";
 import Sidebar from "@components/sidebar";
-
-// ** Utils
-
-// ** Third Party Components
+import { createHospital } from "@/api/hospital";
 import { Controller, useForm } from "react-hook-form";
-
-// ** Reactstrap Imports
-import { Button, Form, FormFeedback, Input, Label } from "reactstrap";
-
-// ** Store & Actions
-import { addUser } from "../store";
-import { useDispatch } from "react-redux";
 import InputPasswordToggle from "@components/input-password-toggle";
-import { createHospital, fetchAllHospital } from "@/api/hospital";
+import { Button, Form, FormFeedback, Input, Label } from "reactstrap";
 
 const defaultValues = {
   email: "",
@@ -34,15 +22,8 @@ const checkIsValid = (data) => {
 };
 
 const SidebarNewUsers = ({ open, toggleSidebar }) => {
-  // ** States
   const [data, setData] = useState(null);
-  const [plan, setPlan] = useState("basic");
-  const [role, setRole] = useState("subscriber");
 
-  // ** Store Vars
-  const dispatch = useDispatch();
-
-  // ** Vars
   const {
     control,
     setValue,
@@ -53,28 +34,13 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
 
   // ** Function to handle form submit
   const onSubmit = (data) => {
-    console.log("onSubmit user data", { data });
     setData(data);
     if (checkIsValid(data)) {
-      createHospital({ location: "location", ...data }).then((res) =>
-        console.log({ res })
-      );
-      toggleSidebar();
-      dispatch(
-        addUser({
-          role,
-          avatar: "",
-          status: "active",
-          email: data.email,
-          currentPlan: plan,
-          billing: "auto debit",
-          company: data.company,
-          contact: data.contact,
-          fullName: data.fullName,
-          username: data.username,
-          country: data.country.value,
-        })
-      );
+      createHospital({
+        latitude: "69.278425",
+        longitude: "41.312251",
+        ...data,
+      }).then((res) => toggleSidebar());
     } else {
       for (const key in data) {
         if (data[key] === null) {
@@ -95,8 +61,6 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
     for (const key in defaultValues) {
       setValue(key, "");
     }
-    setRole("subscriber");
-    setPlan("basic");
   };
 
   return (
