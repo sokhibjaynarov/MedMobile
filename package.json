@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@jitsi/react-sdk": "^1.4.0",
+    "@microsoft/signalr": "^7.0.12",
+    "react-signalr": "^0.2.18",
+    "socket.io-client": "^4.7.2"
+  }
+}

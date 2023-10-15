@@ -12,9 +12,7 @@ function createInstance(baseURL, type, authorization = true) {
   axiosInstance.interceptors.request.use(
     (config) => {
       if (authorization && config.headers) {
-        config.headers.accessToken = `Bearer ${
-          JSON.parse(localStorage.getItem("accessToken")) ?? ""
-        }`;
+        config.headers.accessToken = `Bearer ${JSON.parse(localStorage.getItem("accessToken")) ?? ""}`;
       }
       return config;
     },

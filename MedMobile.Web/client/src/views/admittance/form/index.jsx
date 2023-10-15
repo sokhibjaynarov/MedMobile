@@ -12,6 +12,7 @@ import {fetchAllDoctors} from "../../../api/doctors";
 import {addSessions, getDoctorTimeLines} from "../../../api/time";
 import moment from "moment";
 import {useNavigate} from "react-router-dom";
+import {getUserData} from "../../../auth/utils";
 
 const AdmittanceForm = () => {
     const {t} = useTranslation();
@@ -51,15 +52,16 @@ const AdmittanceForm = () => {
         if (timeLines?.length === 0) return <h4>No available time</h4>
         return timeLines.map(item => {
             return <Button onClick={() => setSelectedTimeline(item)}
-                           color={selectedTimeLine?.timeLineId === item?.timeLineId && "success"} className={"justify-content-start"}>
+                           color={selectedTimeLine?.timeLineId === item?.timeLineId && "success"}
+                           className={"justify-content-start"}>
                 <div className={"m-2"}>From: {moment(item.startDateTime).format("dddd, MMMM Do YYYY, h:mm")}</div>
                 <div>To: {moment(item.endDateTime).format("dddd, MMMM Do YYYY, h:mm")}</div>
             </Button>
         })
     }
-    const onClickSave=(e) => {
+    const onClickSave = (e) => {
         e.preventDefault()
-        addSessions({timeLineId:selectedTimeLine?.timeLineId}).then(res=>{
+        addSessions({timeLineId: selectedTimeLine?.timeLineId, userId: getUserData()?.userId}).then(res => {
             debugger
         })
     }
