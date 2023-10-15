@@ -138,7 +138,7 @@ const DoctorTimeline = () => {
                     <CardTitle className="fw-bold" tag="h2">
                         {t("Patients today")}
                     </CardTitle>
-                    <Button onClick={() => setDoctorsId(id)} className="fw-bold" tag="h2">
+                    <Button color={"success"} onClick={() => setDoctorsId(id)} className="fw-bold" tag="h2">
                         call
                     </Button>
                 </div>
