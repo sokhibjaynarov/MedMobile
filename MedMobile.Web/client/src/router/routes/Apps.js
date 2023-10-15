@@ -113,30 +113,6 @@ const AppRoutes = [
     },
   },
   {
-    element: <Todo />,
-    path: "/apps/todo",
-    meta: {
-      appLayout: true,
-      className: "todo-application",
-    },
-  },
-  {
-    element: <Todo />,
-    path: "/apps/todo/:filter",
-    meta: {
-      appLayout: true,
-      className: "todo-application",
-    },
-  },
-  {
-    element: <Todo />,
-    path: "/apps/todo/tag/:tag",
-    meta: {
-      appLayout: true,
-      className: "todo-application",
-    },
-  },
-  {
     element: <Calendar />,
     path: "/apps/calendar",
   },

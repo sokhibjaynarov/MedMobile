@@ -1,40 +1,29 @@
 // ** Icons Import
-import {Plus, List, FileText, Calendar, MessageSquare, CheckSquare} from "react-feather";
+import {
+  Plus,
+  List,
+  FileText,
+  Calendar,
+  MessageSquare,
+  CheckSquare,
+} from "react-feather";
 
 export default [
   {
     header: "Schedule",
   },
   // {
-  //   id: 'email',
-  //   title: 'Email',
-  //   icon: <Mail size={20} />,
-  //   navLink: '/apps/email'
+  //   id: "chat",
+  //   title: "Chat",
+  //   icon: <MessageSquare size={20} />,
+  //   navLink: "/apps/chat",
   // },
   {
-    id: 'chat',
-    title: 'Chat',
-    icon: <MessageSquare size={20} />,
-    navLink: '/apps/chat'
-  },
-  {
-    id: 'todo',
-    title: 'Todo',
-    icon: <CheckSquare size={20} />,
-    navLink: '/apps/todo'
-  },
-  {
-    id: 'calendar',
-    title: 'Calendar',
+    id: "calendar",
+    title: "Calendar",
     icon: <Calendar size={20} />,
-    navLink: '/apps/calendar'
+    navLink: "/apps/calendar",
   },
-  // {
-  //   id: 'kanban',
-  //   title: 'Kanban',
-  //   icon: <CheckSquare size={20} />,
-  //   navLink: '/apps/kanban'
-  // },
   {
     id: "invoiceApp",
     title: "Schedule",
