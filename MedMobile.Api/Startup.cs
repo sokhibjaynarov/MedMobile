@@ -108,6 +108,7 @@ namespace MedMobile.Api
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors("_myAllowSpecificOrigins");
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
