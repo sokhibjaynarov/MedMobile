@@ -12,7 +12,7 @@ const JitsimeetingComponents = ({doctorId}) => {
                     hiddenPremeetingButtons: ['microphone']
                 }}
 
-                roomName={doctorId} // make sure it's a good one!
+                roomName={doctorId+"this is room id"} // make sure it's a good one!
                 getIFrameRef={node => {
                     node.style.width = '800px'
                     node.style.height = '800px'

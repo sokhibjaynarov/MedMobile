@@ -33,7 +33,10 @@ const AdmittanceForm = () => {
 
     useEffect(() => {
         fetchAllDoctors().then(({data}) => {
-            setDoctors(data.map(item => ({value: item?.userId, label: item?.userId})))
+            setDoctors(data.result.map(item => ({
+                value: item?.user?.userId,
+                label: item?.user.firstName + " " + item?.user.lastName
+            })))
         })
     }, [])
 
@@ -62,7 +65,7 @@ const AdmittanceForm = () => {
     const onClickSave = (e) => {
         e.preventDefault()
         addSessions({timeLineId: selectedTimeLine?.timeLineId, userId: getUserData()?.userId}).then(res => {
-            debugger
+            navigate("/admittance/list")
         })
     }
 
