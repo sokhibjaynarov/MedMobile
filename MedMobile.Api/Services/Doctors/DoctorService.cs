@@ -114,6 +114,7 @@ namespace MedMobile.Api.Services.Doctors
                     Description = a.Description,
                     User = new UserViewModel
                     {
+                        UserId = a.UserId,
                         FirstName = a.User.FirstName,
                         LastName = a.User.LastName,
                         FatherName = a.User.FatherName,
