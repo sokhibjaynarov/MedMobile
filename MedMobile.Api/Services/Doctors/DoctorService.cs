@@ -114,6 +114,7 @@ namespace MedMobile.Api.Services.Doctors
                     Description = a.Description,
                     User = new UserViewModel
                     {
+                        UserId = a.UserId,
                         FirstName = a.User.FirstName,
                         LastName = a.User.LastName,
                         FatherName = a.User.FatherName,
@@ -131,7 +132,7 @@ namespace MedMobile.Api.Services.Doctors
                         FieldId = d.FieldId,
                         Name = d.Field.Name,
                         Description = d.Field.Description
-                    })
+                    }).ToList()
                 }).ToListAsync();
                 return doctors;
             }
