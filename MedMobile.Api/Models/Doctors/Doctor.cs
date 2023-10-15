@@ -5,6 +5,7 @@
 using MedMobile.Api.Models.Hospitals;
 using MedMobile.Api.Models.Users;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -22,7 +23,7 @@ namespace MedMobile.Api.Models.Doctors
         public Guid UserId { get; set; }
 
         public virtual Hospital Hospital { get; set; }
-        public virtual DoctorField DoctorField { get; set; }
+        public virtual List<DoctorField> DoctorFields { get; set; }
         public virtual User User { get; set; }
     }
 }

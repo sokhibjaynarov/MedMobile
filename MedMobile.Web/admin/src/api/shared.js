@@ -12,8 +12,8 @@ function createInstance(baseURL, type, authorization = true) {
   axiosInstance.interceptors.request.use(
     (config) => {
       if (authorization && config.headers) {
-        config.headers.Authorization = `Bearer ${
-          localStorage.getItem("Authorization") ?? ""
+        config.headers.accessToken = `Bearer ${
+          JSON.parse(localStorage.getItem("accessToken")) ?? ""
         }`;
       }
       return config;
@@ -38,12 +38,12 @@ function createInstance(baseURL, type, authorization = true) {
                 headers: {
                   Accept: "application/json",
                   "Content-Type": "application/json",
-                  Authorization: `Bearer ${refreshToken}`,
+                  accessToken: `Bearer + ${refreshToken}`,
                 },
               }
             )
             .then(({ data }) => {
-              localStorage.setItem("Authorization", data.access_token);
+              localStorage.setItem("accessToken", data.access_token);
               window.location.reload();
             })
             .catch(() => {
