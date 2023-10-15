@@ -9,9 +9,11 @@ using System;
 using MedMobile.Api.Services.TimeLines;
 using MedMobile.Api.ViewModels.TimeLines;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MedMobile.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class TimeLineController: RESTFulController

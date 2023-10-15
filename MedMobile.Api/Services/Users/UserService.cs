@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using MedMobile.Api.ViewModels.Hospitals;
 using MedMobile.Api.ViewModels.Doctors;
 using MedMobile.Api.Models.Doctors;
+using MedMobile.Api.Models.Hospitals;
 
 namespace MedMobile.Api.Services.Users
 {
@@ -86,11 +87,15 @@ namespace MedMobile.Api.Services.Users
                 };
 
                 User newUser = await this.userManagementBroker.InsertUserAsync(admin, viewModel.Password);
+
+                Hospital hospital = await storageBroker.SelectHospitalByIdAsync(viewModel.HospitalId);
+                hospital.AdminUserId = newUser.Id;
+                await storageBroker.UpdateHospitalAsync(hospital);
+
                 var roles = new List<string>() { "Admin" };
                 await this.userManagementBroker.AddToRolesAsync(newUser, roles);
 
                 return newUser.Id;
-
             }
             catch (Exception ex)
             {

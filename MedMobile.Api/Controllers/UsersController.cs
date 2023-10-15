@@ -9,9 +9,11 @@ using System;
 using MedMobile.Api.Services.Users;
 using MedMobile.Api.ViewModels.Users;
 using MedMobile.Api.ViewModels.Doctors;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MedMobile.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class UsersController : RESTFulController
@@ -23,6 +25,7 @@ namespace MedMobile.Api.Controllers
             this.userService = userService;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<Guid>> RegisterPatient(RegisterPatientViewModel viewModel)
         {

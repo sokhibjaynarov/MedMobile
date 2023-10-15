@@ -4,6 +4,7 @@
 
 using MedMobile.Api.Services.Identity;
 using MedMobile.Api.ViewModels.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 using System;
