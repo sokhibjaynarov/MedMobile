@@ -36,6 +36,9 @@ namespace MedMobile.Api.Data
         private static Guid DoctorAllergistUserId = Guid.Parse("d6f07052-285f-4a03-9650-3728a312f265");
         private static Guid DoctorCardiologistUserId = Guid.Parse("79fd5583-f37c-4033-8418-f1d0717f6775");
 
+        private static Guid YoungPatientUserId = Guid.Parse("e69ed516-fd27-4448-a620-4127852fd153");
+        private static Guid OldPatientUserId = Guid.Parse("753f7b87-f514-4e64-a5d2-25f1032724d0");
+
         public static async Task SeedRolesAsync(UserManager<User> userManager, RoleManager<Role> roleManager)
         {
             //Seed Roles
@@ -277,6 +280,58 @@ namespace MedMobile.Api.Data
             if (await broker.SelectAllDoctorFields().FirstOrDefaultAsync(p => p.DoctorId == DoctorCardiologistId && p.FieldId == CardiologistFieldId) == null)
             {
                 await broker.InsertDoctorFieldAsync(privateCardiologistDoctorField);
+            }
+        }
+
+        public static async Task SeedPatientsAsync(UserManager<User> userManager, RoleManager<Role> roleManager)
+        {
+            //Seed Patient Users
+            var youngPatientUser = new User
+            {
+                Id = YoungPatientUserId,
+                UserName = "youngpateint@gmail.com",
+                Email = "youngpateint@gmail.com",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                FirstName = "Abdulla",
+                LastName = "RO'ziyev",
+                FatherName = "Sardor",
+                PassportNumber = "AA4564545",
+                PhoneNumber = "+998995827429"
+            };
+
+            if (userManager.Users.All(u => u.Id != youngPatientUser.Id))
+            {
+                var user = await userManager.FindByEmailAsync(youngPatientUser.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(youngPatientUser, "@Admin123");
+                    await userManager.AddToRoleAsync(youngPatientUser, Roles.Patient.ToString());
+                }
+            }
+
+            var oldPatientUser = new User
+            {
+                Id = OldPatientUserId,
+                UserName = "oldpateint@gmail.com",
+                Email = "oldpateint@gmail.com",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                FirstName = "G'aybulla",
+                LastName = "Abdullaev",
+                FatherName = "Abror",
+                PassportNumber = "AA1264545",
+                PhoneNumber = "+998995747429"
+            };
+
+            if (userManager.Users.All(u => u.Id != oldPatientUser.Id))
+            {
+                var user = await userManager.FindByEmailAsync(oldPatientUser.Email);
+                if (user == null)
+                {
+                    await userManager.CreateAsync(oldPatientUser, "@Admin123");
+                    await userManager.AddToRoleAsync(oldPatientUser, Roles.Patient.ToString());
+                }
             }
         }
     }

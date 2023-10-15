@@ -1,7 +1,7 @@
 // ** Navigation imports
 import apps from "./apps";
 // import pages from './pages'
-// import forms from "./forms";
+import forms from "./forms";
 // import tables from './tables'
 // import others from './others'
 // import charts from './charts'
@@ -12,4 +12,4 @@ import reception from "./reception";
 // import uiElements from './ui-elements'
 
 // ** Merge & Export
-export default [...apps, ...doctors, ...patients, ...reception];
+export default [...forms, ...apps, ...doctors, ...patients, ...reception];

@@ -148,7 +148,7 @@ namespace MedMobile.Api.Services.TimeLines
                     EventUrl = a.EventUrl,
                     IsBooked = sessionsTimeLineIds.Contains(a.TimeLineId)
                 }).ToListAsync();
-
+                var count = timeLines.Count();
                 return timeLines;
             }
             catch (Exception ex)
