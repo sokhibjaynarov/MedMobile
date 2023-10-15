@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System;
 using MedMobile.Api.Models.Doctors;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 
 namespace MedMobile.Api.Controllers
 {
@@ -21,11 +22,11 @@ namespace MedMobile.Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<Doctor> GetAllDoctors()
+        public ActionResult<Doctor> GetAllDoctors(Guid? hospitalId, List<Guid> fieldIds)
         {
             try
             {
-                var doctors = this.doctorService.GetAllDoctors();
+                var doctors = this.doctorService.GetAllDoctorsAsync(hospitalId, fieldIds);
                 return Ok(doctors);
             }
             catch (Exception ex)
