@@ -132,7 +132,7 @@ namespace MedMobile.Api.Services.Doctors
                         FieldId = d.FieldId,
                         Name = d.Field.Name,
                         Description = d.Field.Description
-                    })
+                    }).ToList()
                 }).ToListAsync();
                 return doctors;
             }
