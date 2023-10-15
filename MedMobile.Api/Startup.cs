@@ -2,6 +2,8 @@
 // Copyright (c) DevZilla team
 // ---------------------------------------------------------------
 
+using Hangfire;
+using Hangfire.SqlServer;
 using MedMobile.Api.Brokers.Loggings;
 using MedMobile.Api.Brokers.RoleManagement;
 using MedMobile.Api.Brokers.StorageBrokers;
@@ -88,6 +90,21 @@ namespace MedMobile.Api
                 options.MaximumReceiveMessageSize = 9223372036854775807;
             })
             .AddMessagePackProtocol();
+
+            //#region Hangfire
+            //string databaseConnectionString = Configuration.GetConnectionString("Postgre");
+            //services.AddHangfire(configuration => configuration
+            //    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+            //    .UseSimpleAssemblyNameTypeSerializer()
+            //    .UseRecommendedSerializerSettings()
+            //    .UseSqlServerStorage(databaseConnectionString, new SqlServerStorageOptions
+            //    {
+            //        PrepareSchemaIfNecessary = false
+            //    }));
+
+            //services.AddHangfireServer();
+
+            //#endregion
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
@@ -110,6 +127,16 @@ namespace MedMobile.Api
             app.UseCors("_myAllowSpecificOrigins");
             app.UseAuthentication();
             app.UseAuthorization();
+
+            //app.ApplicationServices.GetService<StorageBroker>();
+
+            //var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            //HangfireConfiguration.CreatePostgreSqlScheme(connectionString);
+
+            //app.UseHangfireDashboard();
+
+            //// This will invoke ChangeStatusNomenclatureAsync everyday at 4 am according to UTC (4 am according to UTC == 9 am in Uzbekistan)
+            //RecurringJob.AddOrUpdate<INomenclatureAndCaseHelperService>("ChangeStatusNomenclature", l => l.ChangeStatusNomenclatureAsync(), "0 4 * * *");
 
             app.UseEndpoints(endpoints =>
             {
