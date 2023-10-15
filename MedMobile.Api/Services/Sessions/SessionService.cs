@@ -18,6 +18,10 @@ using Microsoft.AspNetCore.SignalR;
 using MedMobile.Api.Hubs;
 using MedMobile.Api.Models.Users;
 using Microsoft.AspNetCore.Http;
+using MedMobile.Api.ViewModels.Doctors;
+using MedMobile.Api.ViewModels.Fields;
+using MedMobile.Api.ViewModels.Hospitals;
+using MedMobile.Api.ViewModels.Users;
 
 namespace MedMobile.Api.Services.Sessions
 {
@@ -182,6 +186,37 @@ namespace MedMobile.Api.Services.Sessions
 
                 var count = sessionQuery.Count();
 
+                var doctorUserIds = sessionQuery.Select(a => a.TimeLine.DoctorUserId).ToList();
+                var doctors = await storageBroker.SelectAllDoctors().Where(a => doctorUserIds.Contains(a.UserId))
+                    .Select(a => new DoctorForGetViewModel
+                    {
+                        DoctorId = a.DoctorId,
+                        PasportNumber = a.User.PassportNumber,
+                        PhoneNumber = a.User.PhoneNumber,
+                        Description = a.Description,
+                        User = new UserViewModel
+                        {
+                            UserId = a.UserId,
+                            FirstName = a.User.FirstName,
+                            LastName = a.User.LastName,
+                            FatherName = a.User.FatherName,
+                            Email = a.User.Email
+                        },
+                        Hospital = new HospitalForGetViewModel
+                        {
+                            HospitalId = a.HospitalId,
+                            Name = a.Hospital.Name,
+                            Longitude = a.Hospital.Longitude,
+                            Latitude = a.Hospital.Latitude
+                        },
+                        Fields = a.DoctorFields.Select(d => new FieldForGetViewModel
+                        {
+                            FieldId = d.FieldId,
+                            Name = d.Field.Name,
+                            Description = d.Field.Description
+                        }).ToList()
+                    }).ToListAsync();
+
                 var sessions = await sessionQuery.Select(a => new SessionForGetViewModel
                 {
                     SessionId = a.SessionId,
@@ -189,7 +224,18 @@ namespace MedMobile.Api.Services.Sessions
                     EndDateTime = a.TimeLine.EndDateTime,
                     CanceledBy = a.CanceledBy,
                     ReasonOfCanceling = a.ReasonOfCanceling,
-                    Status = a.Status
+                    Status = a.Status,
+                    Patient = new ViewModels.Patients.PatientForGetViewModel
+                    {
+                        UserId = a.UserId,
+                        FirstName = a.User.FirstName,
+                        LastName = a.User.LastName,
+                        FatherName = a.User.FatherName,
+                        Email = a.User.Email,
+                        PassportNumber = a.User.PassportNumber,
+                        PhoneNumber = a.User.PhoneNumber
+                    },
+                    Doctor = doctors.FirstOrDefault(f => f.User.UserId == a.TimeLine.DoctorUserId)
                 }).OrderBy(a => a.StartDateTime).Skip(skip).Take(take).ToListAsync();
 
                 var result = new PaginationResponse(sessions, skip, take, count);

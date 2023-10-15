@@ -2,6 +2,8 @@
 // Copyright (c) DevZilla team
 // ---------------------------------------------------------------
 
+using Hangfire;
+using Hangfire.SqlServer;
 using MedMobile.Api.Brokers.Loggings;
 using MedMobile.Api.Brokers.RoleManagement;
 using MedMobile.Api.Brokers.StorageBrokers;
