@@ -12,8 +12,6 @@ using RESTFulSense.Controllers;
 using MedMobile.Api.Models.Sessions;
 using System.Collections.Generic;
 using MedMobile.Api.ViewModels.Pagination;
-using MedMobile.Api.Models.Roles;
-using Microsoft.AspNetCore.Authorization;
 
 namespace MedMobile.Api.Controllers
 {

@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------
 
 using MedMobile.Api.Models.Sessions;
-using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
@@ -12,9 +11,6 @@ using MedMobile.Api.Brokers.Loggings;
 using MedMobile.Api.Models.TimeLines;
 using MedMobile.Api.ViewModels.Sessions;
 using MedMobile.Api.StaticFunctions;
-using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
-using Microsoft.Extensions.Logging.Abstractions;
 using System.Collections.Generic;
 using MedMobile.Api.ViewModels.Pagination;
 using Microsoft.EntityFrameworkCore;
@@ -25,23 +21,19 @@ namespace MedMobile.Api.Services.Sessions
     {
         private readonly ILoggingBroker loggingBroker;
         private readonly IStorageBroker storageBroker;
-        private readonly IHttpContextAccessor httpContextAccessor;
 
         public SessionService(
             ILoggingBroker loggingBroker, 
-            IStorageBroker storageBroker, 
-            IHttpContextAccessor httpContextAccessor)
+            IStorageBroker storageBroker)
         {
             this.loggingBroker = loggingBroker;
             this.storageBroker = storageBroker;
-            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async ValueTask<Guid> AddSessionAsync(SessionForCreateViewModel viewModel)
         {
             try
             {
-                var userId = Guid.Parse(httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 TimeLine timeLine = await storageBroker.SelectTimeLineByIdAsync(viewModel.TimeLineId);
                 
                 if (timeLine == null)
@@ -52,7 +44,7 @@ namespace MedMobile.Api.Services.Sessions
                 var session = new Session
                 {
                     TimeLineId = viewModel.TimeLineId,
-                    UserId = userId
+                    UserId = viewModel.UserId
                 };
 
                 Session createdSession = await storageBroker.InsertSessionAsync(session);
@@ -70,7 +62,6 @@ namespace MedMobile.Api.Services.Sessions
         {
             try
             {
-                var userId = Guid.Parse(httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 Session session = await storageBroker.SelectSessionByIdAsync(viewModel.SessionId);
 
                 if (session == null)
@@ -79,12 +70,12 @@ namespace MedMobile.Api.Services.Sessions
                 }
 
                 TimeLine timeLine = await storageBroker.SelectTimeLineByIdAsync(session.TimeLineId);
-                if (session.UserId != userId && timeLine.DoctorUserId != userId)
+                if (session.UserId != viewModel.UserId && timeLine.DoctorUserId != viewModel.UserId)
                 {
                     throw new Exception(ResponseMessages.ERROR_NOT_ALLOWED_DATA);
                 }
 
-                session.CanceledBy = userId;
+                session.CanceledBy = viewModel.UserId;
                 session.ReasonOfCanceling = viewModel.ReasonOfCancelling;
                 session.Status = Status.Canceled;
                 await storageBroker.UpdateSessionAsync(session);
