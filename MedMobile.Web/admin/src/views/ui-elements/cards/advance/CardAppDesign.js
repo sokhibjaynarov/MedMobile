@@ -13,6 +13,7 @@ import {
   Badge,
   Button,
   Col,
+  Row,
 } from "reactstrap";
 
 // ** Avatar Imports
@@ -79,25 +80,23 @@ const CardAppDesign = (props) => {
         </div>
         <div className="design-planning-wrapper mb-2 py-75">
           <div className="design-planning">
-            <CardText className="mb-25">Veb sayt</CardText>
-            <a href={website} className="mb-0">
-              {website}
-            </a>
-          </div>
-          <div className="design-planning">
             <CardText className="mb-25">Telefon</CardText>
             <a href={`tel:${phoneNumber}`} className="mb-0">
               {phoneNumber}
             </a>
           </div>
-          <Col md="4" sm="12">
-            <div className="design-planning">
-              <CardText className="mb-25">Email</CardText>
-              <a href={`mailto:${email}`} className="mb-0">
-                {email}
-              </a>
-            </div>
-          </Col>
+          <div className="design-planning">
+            <CardText className="mb-25">Email</CardText>
+            <a href={`mailto:${email}`} className="mb-0">
+              {email}
+            </a>
+          </div>
+          <div className="design-planning">
+            <CardText className="mb-25">Veb sayt</CardText>
+            <a href={website} className="mb-0">
+              {website}
+            </a>
+          </div>
         </div>
         <div className="d-grid">
           <Button color="primary">Ba'tafsil</Button>

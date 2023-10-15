@@ -63,7 +63,7 @@ const EcommerceWishlist = lazy(() =>
   import("../../views/apps/ecommerce/wishlist")
 );
 
-const UserList = lazy(() => import("../../views/apps/user/list"));
+const Hospital = lazy(() => import("../../views/hospital"));
 const UserView = lazy(() => import("../../views/apps/user/view"));
 
 const AppRoutes = [
@@ -320,7 +320,7 @@ const AppRoutes = [
     },
   },
   {
-    element: <UserList />,
+    element: <Hospital />,
     path: "/apps/hospitals",
   },
   {

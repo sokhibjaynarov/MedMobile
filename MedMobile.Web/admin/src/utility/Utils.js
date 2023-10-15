@@ -1,5 +1,6 @@
 import { USER_ROLE } from "./constants";
 import { DefaultRoute } from "../router/routes";
+import { useEffect, useRef } from "react";
 const { ADMIN, CASHIER, DOCTOR, RECEPTIONIST } = USER_ROLE;
 
 // ** Checks if an object is empty (returns boolean)
@@ -75,3 +76,28 @@ export const selectThemeColors = (theme) => ({
     neutral30: "#ededed", // for input hover border-color
   },
 });
+
+export const useDebounce = (callback, delay) => {
+  const timeoutRef = useRef(null);
+
+  useEffect(() => {
+    // Cleanup the previous timeout on re-render
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  const debouncedCallback = (...args) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      callback(...args);
+    }, delay);
+  };
+
+  return debouncedCallback;
+};
