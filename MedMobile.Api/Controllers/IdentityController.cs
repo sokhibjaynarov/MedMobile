@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace MedMobile.Api.Controllers
 {
-    [Authorize]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class IdentityController : RESTFulController

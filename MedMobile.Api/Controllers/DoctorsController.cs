@@ -22,7 +22,7 @@ namespace MedMobile.Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<Doctor> GetAllDoctors(Guid? hospitalId, List<Guid> fieldIds)
+        public ActionResult<Doctor> GetAllDoctors([FromQuery]List<Guid> fieldIds, Guid? hospitalId)
         {
             try
             {

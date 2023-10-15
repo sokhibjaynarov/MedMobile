@@ -25,6 +25,7 @@ namespace MedMobile.Api.Controllers
             this.userService = userService;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<Guid>> RegisterPatient(RegisterPatientViewModel viewModel)
         {
