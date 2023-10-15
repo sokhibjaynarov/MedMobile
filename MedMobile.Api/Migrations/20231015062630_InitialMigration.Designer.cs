@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedMobile.Api.Migrations
 {
     [DbContext(typeof(StorageBroker))]
-    [Migration("20231014202125_Initial")]
-    partial class Initial
+    [Migration("20231015062630_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,11 +64,9 @@ namespace MedMobile.Api.Migrations
 
                     b.HasKey("DoctorFieldId");
 
-                    b.HasIndex("DoctorId")
-                        .IsUnique();
+                    b.HasIndex("DoctorId");
 
-                    b.HasIndex("FieldId")
-                        .IsUnique();
+                    b.HasIndex("FieldId");
 
                     b.ToTable("DoctorFields", "MedMobile");
                 });
@@ -90,6 +88,35 @@ namespace MedMobile.Api.Migrations
                     b.ToTable("Fields", "MedMobile");
                 });
 
+            modelBuilder.Entity("MedMobile.Api.Models.Files.File", b =>
+                {
+                    b.Property<Guid>("FileId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("Content")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Extension")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MimeType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("FileId");
+
+                    b.ToTable("Files", "MedMobile");
+                });
+
             modelBuilder.Entity("MedMobile.Api.Models.Hospitals.Hospital", b =>
                 {
                     b.Property<Guid>("HospitalId")
@@ -107,9 +134,6 @@ namespace MedMobile.Api.Migrations
 
                     b.Property<double>("Latitude")
                         .HasColumnType("float");
-
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Longitude")
                         .HasColumnType("float");
@@ -423,14 +447,14 @@ namespace MedMobile.Api.Migrations
             modelBuilder.Entity("MedMobile.Api.Models.Doctors.DoctorField", b =>
                 {
                     b.HasOne("MedMobile.Api.Models.Doctors.Doctor", "Doctor")
-                        .WithOne("DoctorField")
-                        .HasForeignKey("MedMobile.Api.Models.Doctors.DoctorField", "DoctorId")
+                        .WithMany("DoctorFields")
+                        .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MedMobile.Api.Models.Fields.Field", "Field")
-                        .WithOne("DoctorField")
-                        .HasForeignKey("MedMobile.Api.Models.Doctors.DoctorField", "FieldId")
+                        .WithMany("DoctorFields")
+                        .HasForeignKey("FieldId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -518,12 +542,12 @@ namespace MedMobile.Api.Migrations
 
             modelBuilder.Entity("MedMobile.Api.Models.Doctors.Doctor", b =>
                 {
-                    b.Navigation("DoctorField");
+                    b.Navigation("DoctorFields");
                 });
 
             modelBuilder.Entity("MedMobile.Api.Models.Fields.Field", b =>
                 {
-                    b.Navigation("DoctorField");
+                    b.Navigation("DoctorFields");
                 });
 
             modelBuilder.Entity("MedMobile.Api.Models.Hospitals.Hospital", b =>
