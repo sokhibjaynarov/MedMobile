@@ -11,9 +11,11 @@ using MedMobile.Api.ViewModels.Hospitals;
 using MedMobile.Api.Models.Doctors;
 using MedMobile.Api.Models.Hospitals;
 using MedMobile.Api.ViewModels.Pagination;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MedMobile.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class HospitalsController : RESTFulController

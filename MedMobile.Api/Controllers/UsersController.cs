@@ -9,9 +9,11 @@ using System;
 using MedMobile.Api.Services.Users;
 using MedMobile.Api.ViewModels.Users;
 using MedMobile.Api.ViewModels.Doctors;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MedMobile.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class UsersController : RESTFulController

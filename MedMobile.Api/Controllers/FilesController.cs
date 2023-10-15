@@ -4,6 +4,7 @@
 
 using MedMobile.Api.Models.Files;
 using MedMobile.Api.Services.Files;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 using System;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace MedMobile.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class FilesController : RESTFulController

@@ -1,5 +1,6 @@
 ﻿using MedMobile.Api.Services.Fields;
 using MedMobile.Api.ViewModels.Pagination;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 using System;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace MedMobile.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class FieldsController : RESTFulController
