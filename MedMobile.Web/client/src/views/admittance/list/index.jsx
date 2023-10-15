@@ -127,9 +127,8 @@ const AdmittanceList = () => {
     useEffect(() => {
         getSessions({doctorUserId: getUserData().userId}).then((res) => {
             setSessions(res.data.list)
-            // console.log(res)
         })
-    })
+    }, [])
 
     return (
         <div className="invoice-list-wrapper">

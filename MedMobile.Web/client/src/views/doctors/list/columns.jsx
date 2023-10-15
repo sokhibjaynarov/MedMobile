@@ -9,12 +9,12 @@ export const Column = () => {
   const { handleConfirmText } = ConfirmDelete(1);
   const columns = [
     {
-      name: t("ID Card"),
+      name: "№",
       sortable: true,
       sortField: "id",
-      minWidth: "100px",
-      maxWidth: "150px",
-      cell: (row) => row.id,
+      minWidth: "60px",
+      maxWidth: "60px",
+      cell: (row, index) => index + 1,
     },
     {
       name: t("FIO"),
@@ -22,12 +22,14 @@ export const Column = () => {
       minWidth: "300px",
       sortField: "client.name",
       cell: (row) => {
-        const name = row.client ? row.client.name : "John Doe";
+        const name = row?.user
+          ? `${row?.user?.firstName} ${row?.user?.lastName}`
+          : "John Doe";
         return (
           <div className="d-flex justify-content-left align-items-center">
             <div className="d-flex flex-column">
               <h6 className="user-name text-truncate mb-0">
-                <Link to={`/doctors/preview/${row.id}`}>{name}</Link>
+                <Link to={`/doctors/preview/${row.doctorId}`}>{name}</Link>
               </h6>
             </div>
           </div>
@@ -39,7 +41,7 @@ export const Column = () => {
       sortable: true,
       sortField: "client.name",
       cell: (row) => {
-        const name = row.client ? row.client.name : "John Doe";
+        const name = row?.hospital ? row?.hospital?.name : "Hospital name";
         return (
           <div className="d-flex justify-content-left align-items-center">
             <div className="d-flex flex-column">
@@ -54,11 +56,13 @@ export const Column = () => {
       sortable: true,
       sortField: "client.name",
       cell: (row) => {
-        const name = row.client ? row.client.name : "John Doe";
+        const fieldName = row?.fields?.length
+          ? row?.fields?.map((item) => item?.name).join(", ")
+          : "John Doe";
         return (
           <div className="d-flex justify-content-left align-items-center">
             <div className="d-flex flex-column">
-              <h6 className="user-name text-truncate mb-0">{name}</h6>
+              <h6 className="user-name text-truncate mb-0">{fieldName}</h6>
             </div>
           </div>
         );
@@ -69,11 +73,13 @@ export const Column = () => {
       sortable: true,
       sortField: "client.name",
       cell: (row) => {
-        const name = row.client ? row.client.name : "John Doe";
+        const phoneNumber = row?.phoneNumber
+          ? row?.phoneNumber
+          : "+998992251415";
         return (
           <div className="d-flex justify-content-left align-items-center">
             <div className="d-flex flex-column">
-              <h6 className="user-name text-truncate mb-0">{name}</h6>
+              <h6 className="user-name text-truncate mb-0">{phoneNumber}</h6>
             </div>
           </div>
         );
@@ -85,25 +91,40 @@ export const Column = () => {
       maxWidth: "120px",
       cell: (row) => (
         <div className="column-action d-flex gap-1 align-items-center">
-          <Link id={`pw-tooltip-${row.id}`} to={`/doctors/preview/${row.id}`}>
+          <Link
+            id={`pw-tooltip-${row.doctorId}`}
+            to={`/doctors/preview/${row.doctorId}`}
+          >
             <Eye size={17} />
           </Link>
-          <Link id={`up-tooltip-${row.id}`} to={`/doctors/edit/${row.id}`}>
+          <Link
+            id={`up-tooltip-${row.doctorId}`}
+            to={`/doctors/edit/${row.doctorId}`}
+          >
             <Edit size={17} />
           </Link>
           <a
-            id={`dl-tooltip-${row.id}`}
-            onClick={(e) => handleConfirmText(e, row.id)}
+            id={`dl-tooltip-${row.doctorId}`}
+            onClick={(e) => handleConfirmText(e, row.doctorId)}
           >
             <Trash size={17} />
           </a>
-          <UncontrolledTooltip placement="top" target={`pw-tooltip-${row.id}`}>
+          <UncontrolledTooltip
+            placement="top"
+            target={`pw-tooltip-${row.doctorId}`}
+          >
             {t("View")}
           </UncontrolledTooltip>
-          <UncontrolledTooltip placement="top" target={`up-tooltip-${row.id}`}>
+          <UncontrolledTooltip
+            placement="top"
+            target={`up-tooltip-${row.doctorId}`}
+          >
             {t("Update")}
           </UncontrolledTooltip>
-          <UncontrolledTooltip placement="top" target={`dl-tooltip-${row.id}`}>
+          <UncontrolledTooltip
+            placement="top"
+            target={`dl-tooltip-${row.doctorId}`}
+          >
             {t("Delete")}
           </UncontrolledTooltip>
         </div>
