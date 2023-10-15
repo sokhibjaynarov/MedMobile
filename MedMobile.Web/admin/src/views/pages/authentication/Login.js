@@ -77,7 +77,7 @@ const Login = () => {
     setError,
     handleSubmit,
     formState: { errors },
-  } = useForm({ defaultValues });
+  } = useForm();
 
   const source = skin === "dark" ? illustrationsDark : illustrationsLight;
 
@@ -182,9 +182,6 @@ const Login = () => {
                   <Label className="form-label" for="login-password">
                     Parol
                   </Label>
-                  <Link to="/forgot-password">
-                    <small>Parolni unutdingizmi?</small>
-                  </Link>
                 </div>
                 <Controller
                   id="password"
