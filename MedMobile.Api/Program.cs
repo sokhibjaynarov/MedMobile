@@ -36,6 +36,7 @@ namespace MedMobile.Api
                     await SeedData.SeedHospitalsAsync(context);
                     await SeedData.SeedFieldAsync(context);
                     await SeedData.SeedHospitalDoctorsAsync(userManager, roleManager, context);
+                    await SeedData.SeedPatientsAsync(userManager, roleManager);
                 }
                 catch (Exception ex)
                 {
