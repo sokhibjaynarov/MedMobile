@@ -235,7 +235,7 @@ namespace MedMobile.Api.Services.Sessions
                         PassportNumber = a.User.PassportNumber,
                         PhoneNumber = a.User.PhoneNumber
                     },
-                    Doctor = doctors.FirstOrDefault(f => f.User.UserId == a.TimeLine.DoctorUserId)
+                    //Doctor = doctors.FirstOrDefault(f => f.User.UserId == a.TimeLine.DoctorUserId)
                 }).OrderBy(a => a.StartDateTime).Skip(skip).Take(take).ToListAsync();
 
                 var result = new PaginationResponse(sessions, skip, take, count);
