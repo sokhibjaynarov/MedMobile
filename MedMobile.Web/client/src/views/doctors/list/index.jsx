@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "@styles/react/apps/app-invoice.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 import CustomPagination from "../../../@core/components/pagination";
+import { fetchAllDoctors } from "@/api/doctors";
 
 const DoctorList = () => {
   // ** Translation
@@ -25,6 +26,7 @@ const DoctorList = () => {
   const { columns } = Column();
   const dispatch = useDispatch();
   const store = useSelector((state) => state.invoice);
+  const [doctorList, setDoctorList] = useState([]);
   // ** States
   const [value, setValue] = useState("");
   const [sort, setSort] = useState("desc");
@@ -37,87 +39,26 @@ const DoctorList = () => {
     { title: t("List of doctors") },
   ];
   useEffect(() => {
-    dispatch(
-      getData({
-        sort,
-        q: value,
-        sortColumn,
-        page: currentPage,
-        perPage: rowsPerPage,
-        status: statusValue,
-      })
-    );
-  }, [dispatch, store.data.length]);
+    fetchAllDoctors().then(({ data }) => {
+      setDoctorList(data.result);
+    });
+  }, []);
 
   const handleFilter = (val) => {
     setValue(val);
-    dispatch(
-      getData({
-        sort,
-        q: val,
-        sortColumn,
-        page: currentPage,
-        perPage: rowsPerPage,
-        status: statusValue,
-      })
-    );
   };
 
   const handlePerPage = (e) => {
-    dispatch(
-      getData({
-        sort,
-        q: value,
-        sortColumn,
-        page: currentPage,
-        status: statusValue,
-        perPage: parseInt(e.target.value),
-      })
-    );
     setRowsPerPage(parseInt(e.target.value));
   };
 
   const handlePagination = (page) => {
-    dispatch(
-      getData({
-        sort,
-        q: value,
-        sortColumn,
-        status: statusValue,
-        perPage: rowsPerPage,
-        page: page.selected + 1,
-      })
-    );
     setCurrentPage(page.selected + 1);
-  };
-
-  const dataToRender = () => {
-    const filters = { q: value, status: statusValue };
-
-    const isFiltered = Object.keys(filters).some((k) => filters[k].length > 0);
-
-    if (store.data.length > 0) {
-      return store.data;
-    } else if (store.data.length === 0 && isFiltered) {
-      return [];
-    } else {
-      return store.allData.slice(0, rowsPerPage);
-    }
   };
 
   const handleSort = (column, sortDirection) => {
     setSort(sortDirection);
     setSortColumn(column.sortField);
-    dispatch(
-      getData({
-        q: value,
-        page: currentPage,
-        sort: sortDirection,
-        status: statusValue,
-        perPage: rowsPerPage,
-        sortColumn: column.sortField,
-      })
-    );
   };
 
   return (
@@ -137,14 +78,14 @@ const DoctorList = () => {
             paginationServer
             columns={columns}
             onSort={handleSort}
-            data={dataToRender()}
+            data={doctorList}
             sortIcon={<ChevronDown />}
             className="react-dataTable"
             defaultSortField="invoiceId"
             paginationDefaultPage={currentPage}
             paginationComponent={() => (
               <CustomPagination
-                total={store.total}
+                total={doctorList.length}
                 rowsPerPage={rowsPerPage}
                 onPageChange={(page) => handlePagination(page)}
                 forcePage={currentPage !== 0 ? currentPage - 1 : 0}
