@@ -34,10 +34,12 @@ namespace MedMobile.Api.Controllers
         {
             try
             {
-                var userId = await this.hospitalService.AddHospitalAsync(viewModel);
+                var hospitalId = await this.hospitalService.AddHospitalAsync(viewModel);
+
+                viewModel.HospitalId = hospitalId;
 
                 await this.userService.AddHospitalAdminAsync(viewModel);
-                return Ok(userId);
+                return Ok(hospitalId);
             }
             catch (Exception ex)
             {
