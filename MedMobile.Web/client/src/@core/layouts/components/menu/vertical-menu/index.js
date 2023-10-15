@@ -10,7 +10,6 @@ import VerticalMenuHeader from './VerticalMenuHeader'
 import VerticalNavMenuItems from './VerticalNavMenuItems'
 
 const Sidebar = props => {
-  console.log({ props });
   // ** Props
   const { menuCollapsed, menu, skin, menuData } = props
 

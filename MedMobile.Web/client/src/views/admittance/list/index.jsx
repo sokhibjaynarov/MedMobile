@@ -16,6 +16,8 @@ import { useDispatch, useSelector } from "react-redux";
 import "@styles/react/apps/app-invoice.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 import CustomPagination from "../../../@core/components/pagination";
+import {getSessions} from "../../../api/time";
+import {getUserData} from "../../../auth/utils";
 
 const AdmittanceList = () => {
   // ** Translation
@@ -121,6 +123,11 @@ const AdmittanceList = () => {
       })
     );
   };
+  useEffect(()=>{
+      getSessions({doctorUserId: getUserData().userId}).then((res)=>{
+          console.log(res)
+      })
+  })
 
   return (
     <div className="invoice-list-wrapper">

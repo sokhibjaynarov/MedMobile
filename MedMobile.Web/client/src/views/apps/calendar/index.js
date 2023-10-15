@@ -19,8 +19,6 @@ import {addEvent, fetchEvents, removeEvent, selectEvent, updateAllFilters, updat
 
 // ** Styles
 import '@styles/react/apps/app-calendar.scss'
-import {getDoctorTimeLines} from "../../../api/time";
-import {getUserData} from "../../../auth/utils";
 
 // ** CalendarColors
 const calendarsColor = {
@@ -73,12 +71,7 @@ const CalendarComponent = () => {
     }
     // ** Fetch Events On Mount
     useEffect(() => {
-        let aaaaa=getUserData()
-        console.log(aaaaa)
-        getDoctorTimeLines({doctorUserId: getUserData().userId}).then((res) => {
-            console.log({res})
-        })
-        dispatch(fetchEvents(store.selectedCalendars))
+        dispatch(fetchEvents(store.selectedCalendars));
     }, [])
 
     return (
