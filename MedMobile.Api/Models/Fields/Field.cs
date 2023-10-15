@@ -4,6 +4,7 @@
 
 using MedMobile.Api.Models.Doctors;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,6 +20,6 @@ namespace MedMobile.Api.Models.Fields
         public string Description { get; set; }
 
 
-        public virtual DoctorField DoctorField { get; set; }
+        public virtual List<DoctorField> DoctorFields { get; set; }
     }
 }
